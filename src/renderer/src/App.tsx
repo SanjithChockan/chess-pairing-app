@@ -4,6 +4,9 @@ function App(): JSX.Element {
   return (
     <>
       <div>
+        <h1>Tournament Manager</h1>
+      </div>
+      <div>
         <Button variant="outline" size="lg">
           Create Tournament
         </Button>
