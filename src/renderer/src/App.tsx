@@ -1,5 +1,18 @@
+import { Button } from '@renderer/@/components/ui/button'
+
 function App(): JSX.Element {
-  return <h1 className="text-3xl font-bold underline">Hello world!</h1>
+  return (
+    <>
+      <div>
+        <Button variant="outline" size="lg">
+          Create Tournament
+        </Button>
+        <Button variant="outline" size="lg">
+          Load Tournament
+        </Button>
+      </div>
+    </>
+  )
 }
 
 export default App
