@@ -1,14 +1,14 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/createTournament')({
-  component: createTournament
+export const Route = createFileRoute('/loadTournament')({
+  component: loadTournament
 })
 
-function createTournament(): JSX.Element {
+function loadTournament(): JSX.Element {
   return (
     <>
       <div>
-        <h1>Create Tournament Page</h1>
+        <h1>Load Tournament Page</h1>
       </div>
       <div>
         <Link to="/" className="[&.active]:font-bold">

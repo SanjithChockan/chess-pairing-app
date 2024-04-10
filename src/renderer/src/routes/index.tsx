@@ -2,7 +2,7 @@ import { Button } from '@renderer/@/components/ui/button'
 import { Link, createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/')({
-  component: Index,
+  component: Index
 })
 
 function Index(): JSX.Element {
@@ -13,14 +13,16 @@ function Index(): JSX.Element {
       </div>
       <div>
         <Link to="/createTournament">
-            <Button variant="outline" size="lg">
-                Create Tournament
-            </Button>
+          <Button variant="outline" size="lg">
+            Create Tournament
+          </Button>
         </Link>
-        
-        <Button variant="outline" size="lg">
-          Load Tournament
-        </Button>
+
+        <Link to="/loadTournament">
+          <Button variant="outline" size="lg">
+            Load Tournament
+          </Button>
+        </Link>
       </div>
     </>
   )
