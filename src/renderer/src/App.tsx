@@ -1,7 +1,4 @@
-import { Button } from './@/components/ui/button'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
-
-
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'
@@ -19,17 +16,7 @@ declare module '@tanstack/react-router' {
 function App(): JSX.Element {
   return (
     <>
-      <div>
-        <h1>Tournament Manager</h1>
-      </div>
-      <div>
-        <Button variant="outline" size="lg">
-          Create Tournament
-        </Button>
-        <Button variant="outline" size="lg">
-          Load Tournament
-        </Button>
-      </div>
+      <RouterProvider router={router} />
     </>
   )
 }
