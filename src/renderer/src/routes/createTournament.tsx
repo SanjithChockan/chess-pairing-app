@@ -1,5 +1,5 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
-import TournamentForm from '@renderer/@/components/ui/TournamentForm'
+import TournamentForm from '@renderer/@/components/tournamentregistration/TournamentForm'
 
 export const Route = createFileRoute('/createTournament')({
   component: createTournament
