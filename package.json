@@ -34,6 +34,7 @@
     "electron-updater": "^6.1.7",
     "lucide-react": "^0.365.0",
     "react-hook-form": "^7.51.2",
+    "sqlite3": "^5.1.7",
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.22.4"
