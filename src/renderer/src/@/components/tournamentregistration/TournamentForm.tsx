@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Form,
   FormControl,
@@ -7,33 +9,40 @@ import {
   FormLabel,
   FormMessage
 } from '@renderer/@/components/ui/form'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@renderer/@/components/ui/select'
 import { Input } from '@renderer/@/components/ui/input'
 import { Button } from '@renderer/@/components/ui/button'
 import CardWrapper from './card-wrapper'
 import { useForm } from 'react-hook-form'
-
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
 const formSchema = z.object({
-  username: z.string().min(2, {
-    message: 'Username must be at least 2 characters.'
-  }),
-  tournamentname: z.string().min(1, {
+  tournamentName: z.string().trim().min(1, {
     message: 'Enter tournament name'
   }),
-  tournamentype: z.string().trim().nonempty({ message: 'Tournament type is required' })
+  tournamenType: z.string().trim().min(1, { message: 'Tournament format is required' }),
+  roundNum: z.coerce.number().gte(1, 'Number of rounds must be greater than 0')
 })
 
 export default function TournamentForm(): JSX.Element {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: ''
+      tournamentName: '',
+      tournamenType: '',
+      roundNum: 1
     }
   })
 
   function onSubmit(values: z.infer<typeof formSchema>): void {
+    // use ipc to send data to backend for processing
     console.log(values)
   }
 
@@ -43,19 +52,56 @@ export default function TournamentForm(): JSX.Element {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
             control={form.control}
-            name="username"
+            name="tournamentName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Username</FormLabel>
+                <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="shadcn" {...field} />
+                  <Input placeholder="US Open" {...field} />
                 </FormControl>
-                <FormDescription>This is your public display name.</FormDescription>
+                <FormDescription>Tournament public display name.</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <FormField
+            control={form.control}
+            name="tournamenType"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Format</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a tournament format" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="Swiss">Swiss</SelectItem>
+                    <SelectItem value="Round-robin">Round-robin</SelectItem>
+                    <SelectItem value="Elimination">Elimination</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormDescription>Select tournament format.</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="roundNum"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Rounds</FormLabel>
+                <FormControl>
+                  <Input placeholder="7" type="number" {...field} />
+                </FormControl>
+                <FormDescription>Number of rounds.</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type="submit">Create</Button>
         </form>
       </Form>
     </CardWrapper>

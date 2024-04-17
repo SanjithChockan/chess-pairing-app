@@ -5,6 +5,8 @@ import {
   CardFooter,
   CardTitle
 } from '@renderer/@/components/ui/card'
+import { Button } from '@renderer/@/components/ui/button'
+import { Link } from '@tanstack/react-router'
 
 interface CardWrapperProps {
   children: React.ReactNode
@@ -18,8 +20,9 @@ const CardWrapper = ({ children }: CardWrapperProps): JSX.Element => {
       </CardHeader>
       <CardContent>{children}</CardContent>
       <CardFooter>
-        Card Footer
-        {/* Create submit and back button here */}
+        <Button variant="link" className="font-normal w-full" size="sm" asChild>
+          <Link to="/">Return to homepage</Link>
+        </Button>
       </CardFooter>
     </Card>
   )

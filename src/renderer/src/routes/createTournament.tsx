@@ -1,4 +1,4 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import TournamentForm from '@renderer/@/components/tournamentregistration/TournamentForm'
 
 export const Route = createFileRoute('/createTournament')({
@@ -13,12 +13,6 @@ function createTournament(): JSX.Element {
       </div>
 
       <TournamentForm />
-
-      <div>
-        <Link to="/" className="[&.active]:font-bold">
-          Back
-        </Link>
-      </div>
     </>
   )
 }
