@@ -28,6 +28,7 @@ export default class Manager {
     this.db.run(sql, (err) => {
       if (err) return console.error(err.message)
     })
+    console.log('Added tournament to table')
   }
 
   deleteTournament(id: number): void {

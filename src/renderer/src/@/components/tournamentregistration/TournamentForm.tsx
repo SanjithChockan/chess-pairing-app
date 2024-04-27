@@ -43,7 +43,7 @@ export default function TournamentForm(): JSX.Element {
 
   function onSubmit(values: z.infer<typeof formSchema>): void {
     // use ipc to send data to backend for processing
-    window.api.simpleString('Hello from renderer')
+    window.api.tournamentForm(values)
     console.log(values)
   }
 
