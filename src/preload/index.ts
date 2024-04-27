@@ -1,8 +1,16 @@
-import { contextBridge } from 'electron'
+import { ipcRenderer, contextBridge } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
+export type ContextBridgeApi = {
+  //tournamentForm: (data) => object,
+  simpleString: (testString: string) => void
+}
+
 // Custom APIs for renderer
-const api = {}
+const api: ContextBridgeApi = {
+  simpleString: (value) => ipcRenderer.send('sendTest', value)
+  //tournamentForm: (tournamentInfo) => ipcRenderer.send('tournamentForm', tournamentInfo)
+}
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise
