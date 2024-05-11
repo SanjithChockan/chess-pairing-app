@@ -1,0 +1,4 @@
+PRAGMA foreign_keys=OFF;
+BEGIN TRANSACTION;
+CREATE TABLE tournament_1(player_id INTEGER PRIMARY KEY);
+COMMIT;
