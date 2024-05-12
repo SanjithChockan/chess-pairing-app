@@ -53,7 +53,7 @@ app.whenReady().then(() => {
   ipcMain.on('tournamentForm', (_event, data) => {
     console.log(data)
     const manager = getManagerObj()
-    manager.createTournament(1)
+    manager.createTournament(data.tournamentName)
   })
 
   ipcMain.on('sendTest', (_event, value) => {
