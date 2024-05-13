@@ -18,4 +18,9 @@ export default class Manager {
     })
     console.log('Added Tournament Table to DB')
   }
+
+  loadTournaments(): string[] {
+    // fetch rows from table and return it as list of string
+    return []
+  }
 }
