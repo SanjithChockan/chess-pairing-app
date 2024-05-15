@@ -19,15 +19,10 @@ export default class Manager {
     console.log('Added Tournament Table to DB')
   }
 
-  loadTournaments(): string[] {
+  async loadTournaments(): Promise<any> {
     // fetch rows from table and return it as list of string
     const sql = `SELECT * FROM TourneyList`
-    this.db.all(sql, (_error, rows) => {
-      rows.forEach((row) => {
-        console.log(row.name)
-      })
-    })
-
-    return ['this', 'is', 'a', 'test']
+    const names = await this.db.all(sql)
+    return names
   }
 }

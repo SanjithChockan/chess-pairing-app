@@ -63,7 +63,13 @@ app.whenReady().then(() => {
 
   ipcMain.handle('getTourneyList', (_event, requestString) => {
     console.log(requestString)
-    const values = getManagerObj().loadTournaments()
+    const values = getManagerObj()
+      .loadTournaments()
+      .then((value) => {
+        console.log(value)
+        return value
+      })
+    console.log(`values: ${values}`)
     return values
   })
 
