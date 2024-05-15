@@ -17,6 +17,9 @@ import {
 } from '@renderer/@/components/ui/select'
 
 export default function CardTournamentForm(): JSX.Element {
+  const tourneyList = window.api.getList()
+  tourneyList.then((values) => console.log(values))
+  //console.log(`tourneyList: ${tourneyList}`)
   return (
     <Card className="w-[350px]">
       <CardHeader>

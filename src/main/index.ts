@@ -61,6 +61,12 @@ app.whenReady().then(() => {
     console.log(value)
   })
 
+  ipcMain.handle('getTourneyList', (_event, requestString) => {
+    console.log(requestString)
+    const values = getManagerObj().loadTournaments()
+    return values
+  })
+
   createWindow()
 
   app.on('activate', function () {

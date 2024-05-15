@@ -21,6 +21,13 @@ export default class Manager {
 
   loadTournaments(): string[] {
     // fetch rows from table and return it as list of string
-    return []
+    const sql = `SELECT * FROM TourneyList`
+    this.db.all(sql, (_error, rows) => {
+      rows.forEach((row) => {
+        console.log(row.name)
+      })
+    })
+
+    return ['this', 'is', 'a', 'test']
   }
 }
