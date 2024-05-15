@@ -1,8 +1,6 @@
 import Manager from './manager'
-import sqlite3 from 'sqlite3'
 import path from 'path'
-
-const sqlite3Verbose = sqlite3.verbose()
+import Database from 'better-sqlite3'
 
 export default function getManagerObj(): Manager {
   // connect to db
@@ -17,10 +15,7 @@ export default function getManagerObj(): Manager {
     'experimental.db'
   )
 
-  const db = new sqlite3Verbose.Database(db_path, sqlite3Verbose.OPEN_READWRITE, (err) => {
-    if (err) return console.error(err.message)
-  })
-
+  const db = new Database(db_path)
   const managerObj = new Manager(db, '', '')
   return managerObj
 }
