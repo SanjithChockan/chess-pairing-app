@@ -18,10 +18,10 @@ export default class Manager {
     console.log('Added Tournament Table to DB')
   }
 
-  async loadTournaments(): string[] {
+  loadTournaments(): object[] {
     // fetch rows from table and return it as list of string
     const sql = `SELECT * FROM TourneyList`
-
-    return ['']
+    const names = this.db.prepare(sql).all()
+    return names
   }
 }

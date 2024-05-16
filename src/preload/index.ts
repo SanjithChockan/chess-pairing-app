@@ -4,14 +4,14 @@ import { electronAPI } from '@electron-toolkit/preload'
 export type ContextBridgeApi = {
   simpleString: (testString: string) => void
   tournamentForm: (data) => void
-  getList: () => Promise<string[]>
+  getList: () => Promise<object[]>
 }
 
 // Custom APIs for renderer
 const api: ContextBridgeApi = {
   simpleString: (value) => ipcRenderer.send('sendTest', value),
   tournamentForm: (tournamentInfo) => ipcRenderer.send('tournamentForm', tournamentInfo),
-  getList: async (): Promise<string[]> => {
+  getList: async (): Promise<object[]> => {
     const result = await ipcRenderer.invoke('getTourneyList', 'REQUESTING LIST')
     return result
   }
