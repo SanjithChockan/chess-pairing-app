@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { Button } from '@renderer/@/components/ui/button'
 import {
   Card,
@@ -15,14 +16,20 @@ import {
   SelectTrigger,
   SelectValue
 } from '@renderer/@/components/ui/select'
+import { get } from 'http'
 
 export default function CardTournamentForm(): JSX.Element {
-  const tourneyList = async (): Promise<object[]> => {
-    const names = await window.api.getList()
-    return names
-  }
-  tourneyList().then(console.log)
+  const [tourneyList, setTourneyState] = useState(['default'])
+  useEffect(() => {
+    const f = async (): Promise<void> => {
+      const names = await window.api.getList()
+      setTourneyState(names)
+      console.log('retrieved new data')
+    }
 
+    f()
+  }, [])
+  
   return (
     <Card className="w-[350px]">
       <CardHeader>
@@ -39,10 +46,11 @@ export default function CardTournamentForm(): JSX.Element {
                   <SelectValue placeholder="Select" />
                 </SelectTrigger>
                 <SelectContent position="popper">
-                  <SelectItem value="next">Next.js</SelectItem>
-                  <SelectItem value="sveltekit">SvelteKit</SelectItem>
-                  <SelectItem value="astro">Astro</SelectItem>
-                  <SelectItem value="nuxt">Nuxt.js</SelectItem>
+                  {tourneyList.map((option) => (
+                    <SelectItem key={option.toLowerCase()} value={option.toLowerCase()}>
+                      {option}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
