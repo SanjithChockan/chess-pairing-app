@@ -65,9 +65,9 @@ app.whenReady().then(() => {
     console.log(requestString)
     const names = getManagerObj().loadTournaments()
     console.log(`names from ipcMain.handle: ${JSON.stringify(names)}`)
-    let tourneyNames: string[] = []
+    const tourneyNames: string[] = []
 
-    names.map((name) => {
+    names.map((name: object) => {
       tourneyNames.push(name.name)
     })
     return tourneyNames

@@ -16,7 +16,6 @@ import {
   SelectTrigger,
   SelectValue
 } from '@renderer/@/components/ui/select'
-import { get } from 'http'
 
 export default function CardTournamentForm(): JSX.Element {
   const [tourneyList, setTourneyState] = useState(['default'])
