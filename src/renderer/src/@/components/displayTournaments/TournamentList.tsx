@@ -25,10 +25,9 @@ export default function CardTournamentForm(): JSX.Element {
       setTourneyState(names)
       console.log('retrieved new data')
     }
-
     f()
   }, [])
-  
+
   return (
     <Card className="w-[350px]">
       <CardHeader>
