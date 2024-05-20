@@ -13,12 +13,6 @@ function loadTournament(): JSX.Element {
       </div>
 
       <CardTournamentForm />
-
-      <div>
-        <Link to="/" className="[&.active]:font-bold">
-          Back
-        </Link>
-      </div>
     </>
   )
 }

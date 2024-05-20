@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import { Link } from '@tanstack/react-router'
+
 import { Button } from '@renderer/@/components/ui/button'
 import {
   Card,
@@ -56,7 +58,10 @@ export default function CardTournamentForm(): JSX.Element {
         </form>
       </CardContent>
       <CardFooter className="flex justify-between">
-        <Button variant="outline">Cancel</Button>
+        <Link to="/">
+          <Button variant="outline">Back</Button>
+        </Link>
+        
         <Button>Select</Button>
       </CardFooter>
     </Card>
