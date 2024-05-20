@@ -1,4 +1,4 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import CardTournamentForm from '@renderer/@/components/displayTournaments/TournamentList'
 
 export const Route = createFileRoute('/loadTournament')({
