@@ -1,10 +1,12 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/editTournament')({
-  component: loadTournament
+  component: editTournament
 })
 
-function loadTournament(): JSX.Element {
+function editTournament(): JSX.Element {
+  const { tourneyName } = Route.useSearch()
+  console.log(`tourneyName: ${tourneyName}`)
   return (
     <>
       <div>

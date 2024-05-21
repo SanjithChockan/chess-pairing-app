@@ -62,10 +62,9 @@ export default function CardTournamentForm(): JSX.Element {
           <Button variant="outline">Back</Button>
         </Link>
 
-        <Link to="/editTournament">
+        <Link to="/editTournament" search={{ tourneyName: 'tourneyName' }}>
           <Button>Select</Button>
         </Link>
-        <Button>Select</Button>
       </CardFooter>
     </Card>
   )
