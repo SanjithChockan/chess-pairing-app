@@ -30,6 +30,8 @@ export default function CardTournamentForm(): JSX.Element {
     f()
   }, [])
 
+  const [tourneyName, setTourneyName] = useState('None')
+
   return (
     <Card className="w-[350px]">
       <CardHeader>
@@ -41,7 +43,7 @@ export default function CardTournamentForm(): JSX.Element {
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="tournament">Tournament</Label>
-              <Select>
+              <Select onValueChange={setTourneyName}>
                 <SelectTrigger id="tournament">
                   <SelectValue placeholder="Select" />
                 </SelectTrigger>
@@ -62,7 +64,7 @@ export default function CardTournamentForm(): JSX.Element {
           <Button variant="outline">Back</Button>
         </Link>
 
-        <Link to="/editTournament" search={{ tourneyName: 'tourneyName' }}>
+        <Link to="/editTournament" search={{ tourneyName: tourneyName }}>
           <Button>Select</Button>
         </Link>
       </CardFooter>

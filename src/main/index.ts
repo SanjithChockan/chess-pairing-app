@@ -73,6 +73,18 @@ app.whenReady().then(() => {
     return tourneyNames
   })
 
+  ipcMain.handle('getPlayers', (_event, tournamentName) => {
+    console.log(`requesting players from ${tournamentName}`)
+    const players = getManagerObj().getPlayers(tournamentName)
+    console.log(`player names from ipcMain.handle: ${JSON.stringify(players)}`)
+    const playerNames: object[] = []
+
+    players.map((player: object) => {
+      playerNames.push({ fn: player.firstname, ln: player.lastname })
+    })
+    return playerNames
+  })
+
   createWindow()
 
   app.on('activate', function () {
