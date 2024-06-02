@@ -1,6 +1,5 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { useState, useEffect } from 'react'
-import PlayerTableView from '@renderer/@/components/displayPlayers/PlayerTable'
 
 type tournamentSearch = {
   tourneyName: string
@@ -37,7 +36,6 @@ function editTournament(): JSX.Element {
       <div>
         <h1>Edit Tournament Page</h1>
       </div>
-      <PlayerTableView></PlayerTableView>
       <div>
         <Link to="/" className="[&.active]:font-bold">
           Back
