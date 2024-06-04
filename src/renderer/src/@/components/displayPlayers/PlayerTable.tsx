@@ -35,7 +35,9 @@ export default function PlayerGrid(): JSX.Element {
 
   const addPlayer = useCallback(() => {
     console.log('Adding new Player')
-    const testName = { firstName: 'S', lastName: 'B' }
+    const fn = (document.getElementById('firstname') as HTMLInputElement).value
+    const ln = (document.getElementById('lastname') as HTMLInputElement).value
+    const testName = { firstName: fn, lastName: ln }
     data = [testName, ...data]
     setRowData(data)
   })
