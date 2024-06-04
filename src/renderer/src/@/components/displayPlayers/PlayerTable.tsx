@@ -48,12 +48,6 @@ export default function PlayerGrid(): JSX.Element {
       className="ag-theme-quartz" // applying the grid theme
       style={{ height: 500 }} // the grid will fill the size of the parent container
     >
-      <div>
-        <Button variant="outline" size="lg" onClick={addPlayer}>
-          Add Player
-        </Button>
-      </div>
-
       <AgGridReact rowData={rowData} columnDefs={colDefs} />
       <div>
         <Dialog>
