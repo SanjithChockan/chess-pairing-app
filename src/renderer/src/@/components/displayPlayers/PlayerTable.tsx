@@ -1,75 +1,23 @@
-'use client'
+import { AgGridReact } from 'ag-grid-react'
+import { useState } from 'react'
+import 'ag-grid-community/styles/ag-grid.css'
+import 'ag-grid-community/styles/ag-theme-quartz.css'
+import { data } from './mockData'
 
-import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
+export default function PlayerGrid(): JSX.Element {
+  // Row Data: The data to be displayed.
+  const [rowData, setRowData] = useState(data)
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from '@renderer/@/components/ui/table'
-import { Button } from '../ui/button'
-
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
-}
-
-export function PlayerDataTable<TData, TValue>({
-  columns,
-  data
-}: DataTableProps<TData, TValue>): JSX.Element {
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel()
-  })
+  // Column Definitions: Defines the columns to be displayed.
+  const [colDefs, setColDefs] = useState([{ field: 'firstName' }, { field: 'lastName' }])
 
   return (
-    <>
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(header.column.columnDef.header, header.getContext())}
-                    </TableHead>
-                  )
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
-      <div>
-        <Button>Add Player</Button>
-      </div>
-    </>
+    // wrapping container with theme & size
+    <div
+      className="ag-theme-quartz" // applying the grid theme
+      style={{ height: 500 }} // the grid will fill the size of the parent container
+    >
+      <AgGridReact rowData={rowData} columnDefs={colDefs} />
+    </div>
   )
 }

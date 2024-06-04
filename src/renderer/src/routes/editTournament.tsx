@@ -1,8 +1,7 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { useState, useEffect } from 'react'
-import { PlayerDataTable } from '@renderer/@/components/displayPlayers/PlayerTable'
-import { columns } from '@renderer/@/components/displayPlayers/columns'
-import { data } from '@renderer/@/components/displayPlayers/mockData'
+import PlayerGrid from '@renderer/@/components/displayPlayers/PlayerTable'
+
 type tournamentSearch = {
   tourneyName: string
 }
@@ -38,8 +37,7 @@ function editTournament(): JSX.Element {
       <div>
         <h1>Edit Tournament Page</h1>
       </div>
-
-      <PlayerDataTable columns={columns} data={data} />
+      <PlayerGrid></PlayerGrid>
       <div>
         <Link to="/" className="[&.active]:font-bold">
           Back

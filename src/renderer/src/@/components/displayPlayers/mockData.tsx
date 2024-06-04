@@ -5,6 +5,6 @@ export const data: object[] = [
   },
   {
     firstName: 'sanjith',
-    lastName: 'sanjith'
+    lastName: 'chockan'
   }
 ]
