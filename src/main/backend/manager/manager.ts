@@ -35,9 +35,10 @@ export default class Manager {
     return names
   }
 
-  addPlayer(playerName: string, tournamentName: string): void {
-    const sql = `INSERT INTO ${tournamentName} VALUES (?)`
-    this.db.prepare(sql).run(playerName)
+  addPlayer(playerInfo: object, tournamentName: string): void {
+    const {firstName, lastName} = playerInfo
+    const sql = `INSERT INTO ${tournamentName}_players (firstname, lastname) VALUES (?, ?)`
+    this.db.prepare(sql).run(firstName, lastName)
     console.log('Added player to table')
   }
 }

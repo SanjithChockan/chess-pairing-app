@@ -1,5 +1,5 @@
 import { AgGridReact } from 'ag-grid-react'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
 import { Button } from '@renderer/@/components/ui/button'
@@ -16,6 +16,7 @@ import {
 import { Input } from '@renderer/@/components/ui/input'
 import { Label } from '@renderer/@/components/ui/label'
 
+// replace with backend query
 let data: object[] = [
   {
     firstName: 'testfn1',
@@ -26,12 +27,21 @@ let data: object[] = [
     lastName: 'chockan'
   }
 ]
-export default function PlayerGrid(): JSX.Element {
-  // Row Data: The data to be displayed.
-  const [rowData, setRowData] = useState(data)
 
-  // Column Definitions: Defines the columns to be displayed.
+export default function PlayerGrid({ tourneyName }): JSX.Element {
+  const [playersList, setPlayersState] = useState([{ firstName: '', lastName: '' }])
+  const [rowData, setRowData] = useState(playersList)
   const [colDefs, setColDefs] = useState([{ field: 'firstName' }, { field: 'lastName' }])
+
+  useEffect(() => {
+    const f = async (): Promise<void> => {
+      const names = await window.api.getPlayers(tourneyName)
+      setPlayersState(names)
+      console.log('retrieved player data')
+      console.log(`player names: ${names}`)
+    }
+    f()
+  }, [])
 
   const addPlayer = useCallback(() => {
     console.log('Adding new Player')
@@ -40,14 +50,11 @@ export default function PlayerGrid(): JSX.Element {
     const testName = { firstName: fn, lastName: ln }
     data = [testName, ...data]
     setRowData(data)
+    window.api.addPlayer(tourneyName, testName)
   })
 
   return (
-    // wrapping container with theme & size
-    <div
-      className="ag-theme-quartz" // applying the grid theme
-      style={{ height: 500 }} // the grid will fill the size of the parent container
-    >
+    <div className="ag-theme-quartz" style={{ height: 500 }}>
       <AgGridReact rowData={rowData} columnDefs={colDefs} />
       <div>
         <Dialog>

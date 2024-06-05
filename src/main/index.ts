@@ -56,6 +56,12 @@ app.whenReady().then(() => {
     manager.createTournament(data.tournamentName)
   })
 
+  ipcMain.on('registerPlayer', (_event, data) => {
+    console.log(data)
+    const manager = getManagerObj()
+    manager.addPlayer(data.playerInfo, data.tournamentName)
+  })
+
   ipcMain.on('sendTest', (_event, value) => {
     console.log('Printing from main process')
     console.log(value)
@@ -80,7 +86,7 @@ app.whenReady().then(() => {
     const playerNames: object[] = []
 
     players.map((player: object) => {
-      playerNames.push({ fn: player.firstname, ln: player.lastname })
+      playerNames.push({ firstName: player.firstname, lastName: player.lastname })
     })
     return playerNames
   })

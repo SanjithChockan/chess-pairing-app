@@ -6,6 +6,7 @@ export type ContextBridgeApi = {
   tournamentForm: (data) => void
   getList: () => Promise<string[]>
   getPlayers: (tournamentName: string) => Promise<object[]>
+  addPlayer: (tournamentName: string, playerInfo) => void
 }
 
 type playerObject = {
@@ -23,7 +24,9 @@ const api: ContextBridgeApi = {
   getPlayers: async (tournamentName: string): Promise<playerObject[]> => {
     const result: playerObject[] = await ipcRenderer.invoke('getPlayers', tournamentName)
     return result
-  }
+  },
+  addPlayer: (tournamentName, playerInfo) =>
+    ipcRenderer.send('registerPlayer', { tournamentName, playerInfo })
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to
