@@ -38,7 +38,7 @@ export default function PlayerGrid({ tourneyName }): JSX.Element {
     const fn = (document.getElementById('firstname') as HTMLInputElement).value
     const ln = (document.getElementById('lastname') as HTMLInputElement).value
     const testName = { firstName: fn, lastName: ln }
-    data = [testName, ...data]
+    const data = [testName, ...rowData]
     setRowData(data)
     window.api.addPlayer(tourneyName, testName)
   })
