@@ -35,7 +35,6 @@ export default function PlayerGrid({ tourneyName }): JSX.Element {
   }, [])
 
   const addPlayer = useCallback(() => {
-    console.log('Adding new Player')
     const fn = (document.getElementById('firstname') as HTMLInputElement).value
     const ln = (document.getElementById('lastname') as HTMLInputElement).value
     const testName = { firstName: fn, lastName: ln }
@@ -46,6 +45,7 @@ export default function PlayerGrid({ tourneyName }): JSX.Element {
 
   const onRemoveSelected = useCallback(() => {
     const selectedData = gridRef.current!.api.getSelectedRows()
+    window.api.deletePlayer(tourneyName, selectedData)
     const res = gridRef.current!.api.applyTransaction({
       remove: selectedData
     })!

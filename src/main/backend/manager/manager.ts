@@ -41,4 +41,13 @@ export default class Manager {
     this.db.prepare(sql).run(firstName, lastName)
     console.log('Added player to table')
   }
+
+  deletePlayer(playerInfo: object, tournamentName: string): void {
+    console.log(playerInfo)
+    const {firstName, lastName} = playerInfo[0]
+    console.log(`Removed player ${firstName} ${lastName} from table...`)
+    const sql = `DELETE FROM ${tournamentName}_players WHERE firstname = ? AND lastname = ?`
+    this.db.prepare(sql).run(firstName, lastName)
+    console.log('Removed player from table')
+  }
 }

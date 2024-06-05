@@ -62,6 +62,12 @@ app.whenReady().then(() => {
     manager.addPlayer(data.playerInfo, data.tournamentName)
   })
 
+  ipcMain.on('removePlayer', (_event, data) => {
+    console.log(data)
+    const manager = getManagerObj()
+    manager.deletePlayer(data.playerInfo, data.tournamentName)
+  })
+
   ipcMain.on('sendTest', (_event, value) => {
     console.log('Printing from main process')
     console.log(value)
