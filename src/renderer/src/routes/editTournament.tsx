@@ -26,7 +26,7 @@ function editTournament(): JSX.Element {
         <h1>Edit Tournament Page</h1>
       </div>
       <div>
-      <PlayerGrid tourneyName={tourneyName}></PlayerGrid>
+        <PlayerGrid tourneyName={tourneyName}></PlayerGrid>
       </div>
     </>
   )

@@ -1,5 +1,5 @@
 import { AgGridReact } from 'ag-grid-react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, useRef } from 'react'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
 import { Button } from '@renderer/@/components/ui/button'
@@ -18,6 +18,7 @@ import { Label } from '@renderer/@/components/ui/label'
 import { Link } from '@tanstack/react-router'
 
 export default function PlayerGrid({ tourneyName }): JSX.Element {
+  const gridRef = useRef<AgGridReact>(null);
   const [playersList, setPlayersState] = useState([{ firstName: '', lastName: '' }])
   const [rowData, setRowData] = useState(playersList)
   const [colDefs, setColDefs] = useState([{ field: 'firstName' }, { field: 'lastName' }])
@@ -43,9 +44,16 @@ export default function PlayerGrid({ tourneyName }): JSX.Element {
     window.api.addPlayer(tourneyName, testName)
   })
 
+  const onRemoveSelected = useCallback(() => {
+    const selectedData = gridRef.current!.api.getSelectedRows()
+    const res = gridRef.current!.api.applyTransaction({
+      remove: selectedData
+    })!
+  }, [])
+
   return (
     <div className="ag-theme-quartz" style={{ height: 500 }}>
-      <AgGridReact rowData={rowData} columnDefs={colDefs} />
+      <AgGridReact ref={gridRef} rowData={rowData} columnDefs={colDefs} rowSelection={'multiple'} />
       <div>
         <Dialog>
           <DialogTrigger asChild>
@@ -81,10 +89,13 @@ export default function PlayerGrid({ tourneyName }): JSX.Element {
             </DialogFooter>
           </DialogContent>
         </Dialog>
+        <Button variant="outline" onClick={onRemoveSelected}>
+          Delete Selected
+        </Button>
       </div>
       <Link to="/">
-          <Button variant="outline">Back</Button>
-        </Link>
+        <Button variant="outline">Back</Button>
+      </Link>
     </div>
   )
 }
