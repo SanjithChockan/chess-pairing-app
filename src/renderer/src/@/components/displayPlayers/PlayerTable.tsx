@@ -15,18 +15,7 @@ import {
 } from '@renderer/@/components/ui/dialog'
 import { Input } from '@renderer/@/components/ui/input'
 import { Label } from '@renderer/@/components/ui/label'
-
-// replace with backend query
-let data: object[] = [
-  {
-    firstName: 'testfn1',
-    lastName: 'testln1'
-  },
-  {
-    firstName: 'sanjith',
-    lastName: 'chockan'
-  }
-]
+import { Link } from '@tanstack/react-router'
 
 export default function PlayerGrid({ tourneyName }): JSX.Element {
   const [playersList, setPlayersState] = useState([{ firstName: '', lastName: '' }])
@@ -37,6 +26,7 @@ export default function PlayerGrid({ tourneyName }): JSX.Element {
     const f = async (): Promise<void> => {
       const names = await window.api.getPlayers(tourneyName)
       setPlayersState(names)
+      setRowData(names)
       console.log('retrieved player data')
       console.log(`player names: ${names}`)
     }
@@ -92,6 +82,9 @@ export default function PlayerGrid({ tourneyName }): JSX.Element {
           </DialogContent>
         </Dialog>
       </div>
+      <Link to="/">
+          <Button variant="outline">Back</Button>
+        </Link>
     </div>
   )
 }

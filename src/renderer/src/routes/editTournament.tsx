@@ -1,12 +1,8 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
-import { useState, useEffect } from 'react'
+import { Button } from '@renderer/@/components/ui/button'
 import PlayerGrid from '@renderer/@/components/displayPlayers/PlayerTable'
 
 type tournamentSearch = {
-  tourneyName: string
-}
-
-interface IMyProps {
   tourneyName: string
 }
 
@@ -29,11 +25,8 @@ function editTournament(): JSX.Element {
       <div>
         <h1>Edit Tournament Page</h1>
       </div>
-      <PlayerGrid tourneyName={tourneyName}></PlayerGrid>
       <div>
-        <Link to="/" className="[&.active]:font-bold">
-          Back
-        </Link>
+      <PlayerGrid tourneyName={tourneyName}></PlayerGrid>
       </div>
     </>
   )
