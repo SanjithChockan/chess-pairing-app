@@ -51,19 +51,16 @@ app.whenReady().then(() => {
 
   // IPC Handlers
   ipcMain.on('tournamentForm', (_event, data) => {
-    console.log(data)
     const manager = getManagerObj()
     manager.createTournament(data.tournamentName)
   })
 
   ipcMain.on('registerPlayer', (_event, data) => {
-    console.log(data)
     const manager = getManagerObj()
     manager.addPlayer(data.playerInfo, data.tournamentName)
   })
 
   ipcMain.on('removePlayer', (_event, data) => {
-    console.log(data)
     const manager = getManagerObj()
     manager.deletePlayer(data.playerInfo, data.tournamentName)
   })
@@ -74,9 +71,7 @@ app.whenReady().then(() => {
   })
 
   ipcMain.handle('getTourneyList', (_event, requestString) => {
-    console.log(requestString)
     const names = getManagerObj().loadTournaments()
-    console.log(`names from ipcMain.handle: ${JSON.stringify(names)}`)
     const tourneyNames: string[] = []
 
     names.map((name: object) => {
@@ -86,9 +81,7 @@ app.whenReady().then(() => {
   })
 
   ipcMain.handle('getPlayers', (_event, tournamentName) => {
-    console.log(`requesting players from ${tournamentName}`)
     const players = getManagerObj().getPlayers(tournamentName)
-    console.log(`player names from ipcMain.handle: ${JSON.stringify(players)}`)
     const playerNames: object[] = []
 
     players.map((player: object) => {
