@@ -85,7 +85,11 @@ app.whenReady().then(() => {
     const playerNames: object[] = []
 
     players.map((player: object) => {
-      playerNames.push({ firstName: player.firstname, lastName: player.lastname })
+      playerNames.push({
+        firstName: player.firstname,
+        lastName: player.lastname,
+        rating: player.rating
+      })
     })
     return playerNames
   })

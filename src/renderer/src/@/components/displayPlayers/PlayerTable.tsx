@@ -18,10 +18,14 @@ import { Label } from '@renderer/@/components/ui/label'
 import { Link } from '@tanstack/react-router'
 
 export default function PlayerGrid({ tourneyName }): JSX.Element {
-  const gridRef = useRef<AgGridReact>(null);
-  const [playersList, setPlayersState] = useState([{ firstName: '', lastName: '' }])
+  const gridRef = useRef<AgGridReact>(null)
+  const [playersList, setPlayersState] = useState([{ firstName: '', lastName: '', rating: 0 }])
   const [rowData, setRowData] = useState(playersList)
-  const [colDefs, setColDefs] = useState([{ field: 'firstName' }, { field: 'lastName' }])
+  const [colDefs, setColDefs] = useState([
+    { field: 'firstName' },
+    { field: 'lastName' },
+    { field: 'rating' }
+  ])
 
   useEffect(() => {
     const f = async (): Promise<void> => {
@@ -37,7 +41,8 @@ export default function PlayerGrid({ tourneyName }): JSX.Element {
   const addPlayer = useCallback(() => {
     const fn = (document.getElementById('firstname') as HTMLInputElement).value
     const ln = (document.getElementById('lastname') as HTMLInputElement).value
-    const testName = { firstName: fn, lastName: ln }
+    const rt = 0
+    const testName = { firstName: fn, lastName: ln, rating: rt }
     const data = [testName, ...rowData]
     setRowData(data)
     window.api.addPlayer(tourneyName, testName)

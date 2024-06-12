@@ -18,7 +18,7 @@ export default class Manager {
     console.log('Added Tournament Table to DB')
 
     // create table for tournament to store player information
-    const query = `CREATE TABLE IF NOT EXISTS ${name}_players(firstname TEXT NOT NULL, lastname TEXT NOT NULL)`
+    const query = `CREATE TABLE IF NOT EXISTS ${name}_players(firstname TEXT NOT NULL, lastname TEXT NOT NULL, rating INT)`
     this.db.exec(query)
   }
 
@@ -36,15 +36,15 @@ export default class Manager {
   }
 
   addPlayer(playerInfo: object, tournamentName: string): void {
-    const { firstName, lastName } = playerInfo
-    const sql = `INSERT INTO ${tournamentName}_players (firstname, lastname) VALUES (?, ?)`
-    this.db.prepare(sql).run(firstName, lastName)
+    const { firstName, lastName, rating } = playerInfo
+    const sql = `INSERT INTO ${tournamentName}_players (firstname, lastname, rating) VALUES (?, ?, ?)`
+    this.db.prepare(sql).run(firstName, lastName, rating)
   }
 
   deletePlayer(playerInfo: object, tournamentName: string): void {
     console.log(playerInfo)
-    const { firstName, lastName } = playerInfo[0]
-    const sql = `DELETE FROM ${tournamentName}_players WHERE firstname = ? AND lastname = ?`
-    this.db.prepare(sql).run(firstName, lastName)
+    const { firstName, lastName, rating } = playerInfo[0]
+    const sql = `DELETE FROM ${tournamentName}_players WHERE firstname = ? AND lastname = ? AND rating = ?`
+    this.db.prepare(sql).run(firstName, lastName, rating)
   }
 }
