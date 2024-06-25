@@ -65,6 +65,11 @@ app.whenReady().then(() => {
     manager.deletePlayer(data.playerInfo, data.tournamentName)
   })
 
+  ipcMain.handle('createStandings', async (_event, data) => {
+    const manager = getManagerObj()
+    manager.createStandings(data.tournamentName)
+  })
+
   ipcMain.on('sendTest', (_event, value) => {
     console.log('Printing from main process')
     console.log(value)

@@ -15,7 +15,7 @@ import {
 } from '@renderer/@/components/ui/dialog'
 import { Input } from '@renderer/@/components/ui/input'
 import { Label } from '@renderer/@/components/ui/label'
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 
 export default function PlayerGrid({ tourneyName }): JSX.Element {
   const gridRef = useRef<AgGridReact>(null)
@@ -38,6 +38,12 @@ export default function PlayerGrid({ tourneyName }): JSX.Element {
     f()
   }, [])
 
+  const navigate = useNavigate()
+  const completeRegistration = useCallback(async () => {
+    await window.api.completeRegistration(tourneyName)
+    navigate({ to: '/standings/$tourneyName', params: { tourneyName: tourneyName } })
+  }, [tourneyName, navigate])
+
   const addPlayer = useCallback(() => {
     const fn = (document.getElementById('firstname') as HTMLInputElement).value
     const ln = (document.getElementById('lastname') as HTMLInputElement).value
@@ -57,50 +63,71 @@ export default function PlayerGrid({ tourneyName }): JSX.Element {
   }, [])
 
   return (
-    <div className="ag-theme-quartz" style={{ height: 500 }}>
-      <AgGridReact ref={gridRef} rowData={rowData} columnDefs={colDefs} rowSelection={'multiple'} />
-      <div>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button variant="outline">Add Player</Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Player Details</DialogTitle>
-              <DialogDescription>
-                Enter new player information here. Click save when you're done.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="firstname" className="text-right">
-                  First Name
-                </Label>
-                <Input id="firstname" defaultValue="Pedro" className="col-span-3" />
+    <div className="flex flex-col gap-4 mx-auto w-[60%] max-w-5xl">
+      <div className="flex justify-between items-center">
+        <div className="flex items-center gap-2">
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="outline">Add Player</Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Player Details</DialogTitle>
+                <DialogDescription>
+                  Enter new player information here. Click save when you're done.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="firstname" className="text-right">
+                    First Name
+                  </Label>
+                  <Input id="firstname" defaultValue="Pedro" className="col-span-3" />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="lastname" className="text-right">
+                    Last Name
+                  </Label>
+                  <Input id="lastname" defaultValue="Duarte" className="col-span-3" />
+                </div>
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="lastname" className="text-right">
-                  Last Name
-                </Label>
-                <Input id="lastname" defaultValue="Duarte" className="col-span-3" />
-              </div>
-            </div>
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button type="submit" onClick={addPlayer}>
-                  Enter
-                </Button>
-              </DialogClose>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-        <Button variant="outline" onClick={onRemoveSelected}>
-          Delete Selected
-        </Button>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button type="submit" onClick={addPlayer}>
+                    Enter
+                  </Button>
+                </DialogClose>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+          <Button variant="outline" onClick={onRemoveSelected}>
+            Delete Selected
+          </Button>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            className="bg-green-500 hover:bg-green-600 text-white border-green-500 hover:border-green-600"
+            onClick={completeRegistration}
+          >
+            Complete Registration
+          </Button>
+        </div>
       </div>
-      <Link to="/">
-        <Button variant="outline">Back</Button>
-      </Link>
+
+      <div className="ag-theme-quartz w-full" style={{ height: 500 }}>
+        <AgGridReact
+          ref={gridRef}
+          rowData={rowData}
+          columnDefs={colDefs}
+          rowSelection={'multiple'}
+        />
+      </div>
+      <div className="flex justify-end">
+        <Link to="/">
+          <Button variant="outline">Back</Button>
+        </Link>
+      </div>
     </div>
   )
 }

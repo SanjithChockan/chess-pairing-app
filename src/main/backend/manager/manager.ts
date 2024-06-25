@@ -1,5 +1,11 @@
 import Database from 'better-sqlite3'
 
+type playerObject = {
+  firstname: string
+  lastname: string
+  rating: number
+}
+
 export default class Manager {
   db: Database
   name: string
@@ -46,5 +52,23 @@ export default class Manager {
     const { firstName, lastName, rating } = playerInfo[0]
     const sql = `DELETE FROM ${tournamentName}_players WHERE firstname = ? AND lastname = ? AND rating = ?`
     this.db.prepare(sql).run(firstName, lastName, rating)
+  }
+
+  createStandings(tournamentName: string): void {
+    console.log(tournamentName)
+    // create standings table
+    const query = `CREATE TABLE IF NOT EXISTS ${tournamentName}_standings(firstname TEXT NOT NULL, lastname TEXT NOT NULL, rating INT, score INT)`
+    this.db.exec(query)
+
+    // fill table with players and score of zero
+    const sql = `SELECT * FROM ${tournamentName}_players`
+    const players = this.db.prepare(sql).all()
+
+    players.forEach((player: playerObject) => {
+      const { firstname, lastname, rating } = player
+      const fill_query = `INSERT INTO ${tournamentName}_standings (firstname, lastname, rating, score) VALUES (?, ?, ?, ?)`
+      this.db.prepare(fill_query).run(firstname, lastname, rating, 0)
+    })
+    console.log(`filled standings table ${tournamentName}_standings`)
   }
 }
