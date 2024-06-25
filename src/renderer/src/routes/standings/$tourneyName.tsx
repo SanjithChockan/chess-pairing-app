@@ -10,7 +10,7 @@ function standingsTable(): JSX.Element {
   return (
     <>
       <div>
-        <h1>Standings Table for Tournament: {tourneyName}</h1>
+        <h1>{tourneyName} Standings Table </h1>
       </div>
     </>
   )
