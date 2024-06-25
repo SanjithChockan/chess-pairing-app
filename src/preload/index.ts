@@ -9,6 +9,7 @@ export type ContextBridgeApi = {
   addPlayer: (tournamentName: string, playerInfo) => void
   deletePlayer: (tournamentName, playerInfo) => void
   completeRegistration: (tournamentName) => Promise<void>
+  checkStandingsExist: (tournamentName) => Promise<boolean>
 }
 
 type playerObject = {
@@ -32,7 +33,9 @@ const api: ContextBridgeApi = {
   deletePlayer: (tournamentName, playerInfo) =>
     ipcRenderer.send('removePlayer', { tournamentName, playerInfo }),
   completeRegistration: (tournamentName) =>
-    ipcRenderer.invoke('createStandings', { tournamentName })
+    ipcRenderer.invoke('createStandings', { tournamentName }),
+  checkStandingsExist: (tournamentName) =>
+    ipcRenderer.invoke('checkStandingsExist', { tournamentName })
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

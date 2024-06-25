@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 
 import { Button } from '@renderer/@/components/ui/button'
 import {
@@ -21,6 +21,9 @@ import {
 
 export default function CardTournamentForm(): JSX.Element {
   const [tourneyList, setTourneyState] = useState(['default'])
+  const [tourneyName, setTourneyName] = useState('None')
+  const navigate = useNavigate()
+
   useEffect(() => {
     const f = async (): Promise<void> => {
       const names = await window.api.getList()
@@ -30,7 +33,16 @@ export default function CardTournamentForm(): JSX.Element {
     f()
   }, [])
 
-  const [tourneyName, setTourneyName] = useState('None')
+  const handleSelectTournament = async (): Promise<void> => {
+    if (tourneyName !== 'None') {
+      const standingsExist = await window.api.checkStandingsExist(tourneyName)
+      if (standingsExist) {
+        navigate({ to: '/standings/$tourneyName', params: { tourneyName } })
+      } else {
+        navigate({ to: '/editTournament', search: { tourneyName } })
+      }
+    }
+  }
 
   return (
     <Card className="w-[350px]">
@@ -64,9 +76,7 @@ export default function CardTournamentForm(): JSX.Element {
           <Button variant="outline">Back</Button>
         </Link>
 
-        <Link to="/editTournament" search={{ tourneyName: tourneyName }}>
-          <Button>Select</Button>
-        </Link>
+        <Button onClick={handleSelectTournament}>Select</Button>
       </CardFooter>
     </Card>
   )

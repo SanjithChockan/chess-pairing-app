@@ -71,4 +71,10 @@ export default class Manager {
     })
     console.log(`filled standings table ${tournamentName}_standings`)
   }
+
+  checkStandings(tournamentName: string): boolean {
+    const query = `SELECT name FROM sqlite_master WHERE type='table' AND name=?`
+    const result = this.db.prepare(query).get(`${tournamentName}_standings`)
+    return result !== undefined
+  }
 }

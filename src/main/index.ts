@@ -65,6 +65,12 @@ app.whenReady().then(() => {
     manager.deletePlayer(data.playerInfo, data.tournamentName)
   })
 
+  ipcMain.handle('checkStandingsExist', async (_event, data) => {
+    const manager = getManagerObj()
+    const doesExist = manager.checkStandings(data.tournamentName)
+    return doesExist
+  })
+
   ipcMain.handle('createStandings', async (_event, data) => {
     const manager = getManagerObj()
     manager.createStandings(data.tournamentName)
