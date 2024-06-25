@@ -52,15 +52,15 @@ export default function PlayerGrid({ tourneyName }): JSX.Element {
     const data = [testName, ...rowData]
     setRowData(data)
     window.api.addPlayer(tourneyName, testName)
-  })
+  }, [rowData])
 
   const onRemoveSelected = useCallback(() => {
     const selectedData = gridRef.current!.api.getSelectedRows()
     window.api.deletePlayer(tourneyName, selectedData)
-    const res = gridRef.current!.api.applyTransaction({
+    gridRef.current!.api.applyTransaction({
       remove: selectedData
     })!
-  }, [])
+  }, [rowData])
 
   return (
     <div className="flex flex-col gap-4 mx-auto w-[60%] max-w-5xl">
