@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as LoadTournamentImport } from './routes/loadTournament'
+import { Route as GenerateRoundsImport } from './routes/generateRounds'
 import { Route as EditTournamentImport } from './routes/editTournament'
 import { Route as CreateTournamentImport } from './routes/createTournament'
 import { Route as IndexImport } from './routes/index'
@@ -20,6 +21,11 @@ import { Route as IndexImport } from './routes/index'
 
 const LoadTournamentRoute = LoadTournamentImport.update({
   path: '/loadTournament',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const GenerateRoundsRoute = GenerateRoundsImport.update({
+  path: '/generateRounds',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -63,6 +69,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EditTournamentImport
       parentRoute: typeof rootRoute
     }
+    '/generateRounds': {
+      id: '/generateRounds'
+      path: '/generateRounds'
+      fullPath: '/generateRounds'
+      preLoaderRoute: typeof GenerateRoundsImport
+      parentRoute: typeof rootRoute
+    }
     '/loadTournament': {
       id: '/loadTournament'
       path: '/loadTournament'
@@ -79,6 +92,7 @@ export const routeTree = rootRoute.addChildren({
   IndexRoute,
   CreateTournamentRoute,
   EditTournamentRoute,
+  GenerateRoundsRoute,
   LoadTournamentRoute,
 })
 
