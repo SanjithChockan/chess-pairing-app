@@ -17,6 +17,7 @@ import { Route as EditTournamentImport } from './routes/editTournament'
 import { Route as CreateTournamentImport } from './routes/createTournament'
 import { Route as IndexImport } from './routes/index'
 import { Route as StandingsTourneyNameImport } from './routes/standings/$tourneyName'
+import { Route as RoundGenViewTourneyNameImport } from './routes/roundGenView/$tourneyName'
 
 // Create/Update Routes
 
@@ -47,6 +48,11 @@ const IndexRoute = IndexImport.update({
 
 const StandingsTourneyNameRoute = StandingsTourneyNameImport.update({
   path: '/standings/$tourneyName',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const RoundGenViewTourneyNameRoute = RoundGenViewTourneyNameImport.update({
+  path: '/roundGenView/$tourneyName',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -89,6 +95,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoadTournamentImport
       parentRoute: typeof rootRoute
     }
+    '/roundGenView/$tourneyName': {
+      id: '/roundGenView/$tourneyName'
+      path: '/roundGenView/$tourneyName'
+      fullPath: '/roundGenView/$tourneyName'
+      preLoaderRoute: typeof RoundGenViewTourneyNameImport
+      parentRoute: typeof rootRoute
+    }
     '/standings/$tourneyName': {
       id: '/standings/$tourneyName'
       path: '/standings/$tourneyName'
@@ -107,6 +120,7 @@ export const routeTree = rootRoute.addChildren({
   EditTournamentRoute,
   GenerateRoundsRoute,
   LoadTournamentRoute,
+  RoundGenViewTourneyNameRoute,
   StandingsTourneyNameRoute,
 })
 
