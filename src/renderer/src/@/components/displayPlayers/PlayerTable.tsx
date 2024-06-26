@@ -17,7 +17,11 @@ import { Input } from '@renderer/@/components/ui/input'
 import { Label } from '@renderer/@/components/ui/label'
 import { Link, useNavigate } from '@tanstack/react-router'
 
-export default function PlayerGrid({ tourneyName }): JSX.Element {
+type propType = {
+  tourneyName: string
+}
+
+export default function PlayerGrid({ tourneyName }: propType): JSX.Element {
   const gridRef = useRef<AgGridReact>(null)
   const [playersList, setPlayersState] = useState([{ firstName: '', lastName: '', rating: 0 }])
   const [rowData, setRowData] = useState(playersList)
