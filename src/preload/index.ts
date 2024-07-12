@@ -10,12 +10,9 @@ export type ContextBridgeApi = {
   deletePlayer: (tournamentName, playerInfo) => void
   completeRegistration: (tournamentName) => Promise<void>
   checkStandingsExist: (tournamentName) => Promise<boolean>
+  getCurrentStandings: (tournamentName) => Promise<object[]>
 }
 
-type playerObject = {
-  fn: string
-  ln: string
-}
 // Custom APIs for renderer
 const api: ContextBridgeApi = {
   simpleString: (value) => ipcRenderer.send('sendTest', value),
@@ -24,8 +21,8 @@ const api: ContextBridgeApi = {
     const result = await ipcRenderer.invoke('getTourneyList', 'REQUESTING LIST')
     return result
   },
-  getPlayers: async (tournamentName: string): Promise<playerObject[]> => {
-    const result: playerObject[] = await ipcRenderer.invoke('getPlayers', tournamentName)
+  getPlayers: async (tournamentName: string): Promise<object[]> => {
+    const result: object[] = await ipcRenderer.invoke('getPlayers', tournamentName)
     return result
   },
   addPlayer: (tournamentName, playerInfo) =>
@@ -35,7 +32,12 @@ const api: ContextBridgeApi = {
   completeRegistration: (tournamentName) =>
     ipcRenderer.invoke('createStandings', { tournamentName }),
   checkStandingsExist: (tournamentName) =>
-    ipcRenderer.invoke('checkStandingsExist', { tournamentName })
+    ipcRenderer.invoke('checkStandingsExist', { tournamentName }),
+  getCurrentStandings: async (tournamentName: string): Promise<object[]> => {
+    const result: object[] = await ipcRenderer.invoke('getCurrentStandings', tournamentName)
+    return result
+  }
+
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

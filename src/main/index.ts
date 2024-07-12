@@ -49,31 +49,27 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
+  const managerObj = getManagerObj()
   // IPC Handlers
   ipcMain.on('tournamentForm', (_event, data) => {
-    const manager = getManagerObj()
-    manager.createTournament(data.tournamentName)
+    managerObj.createTournament(data.tournamentName)
   })
 
   ipcMain.on('registerPlayer', (_event, data) => {
-    const manager = getManagerObj()
-    manager.addPlayer(data.playerInfo, data.tournamentName)
+    managerObj.addPlayer(data.playerInfo, data.tournamentName)
   })
 
   ipcMain.on('removePlayer', (_event, data) => {
-    const manager = getManagerObj()
-    manager.deletePlayer(data.playerInfo, data.tournamentName)
+    managerObj.deletePlayer(data.playerInfo, data.tournamentName)
   })
 
   ipcMain.handle('checkStandingsExist', async (_event, data) => {
-    const manager = getManagerObj()
-    const doesExist = manager.checkStandings(data.tournamentName)
+    const doesExist = managerObj.checkStandings(data.tournamentName)
     return doesExist
   })
 
   ipcMain.handle('createStandings', async (_event, data) => {
-    const manager = getManagerObj()
-    manager.createStandings(data.tournamentName)
+    managerObj.createStandings(data.tournamentName)
   })
 
   ipcMain.on('sendTest', (_event, value) => {
@@ -82,7 +78,7 @@ app.whenReady().then(() => {
   })
 
   ipcMain.handle('getTourneyList', (_event, requestString) => {
-    const names = getManagerObj().loadTournaments()
+    const names = managerObj.loadTournaments()
     const tourneyNames: string[] = []
 
     names.map((name: object) => {
@@ -91,15 +87,43 @@ app.whenReady().then(() => {
     return tourneyNames
   })
 
+  type playerObj = {
+    firstname: string
+    lastname: string
+    rating: number
+  }
+
   ipcMain.handle('getPlayers', (_event, tournamentName) => {
-    const players = getManagerObj().getPlayers(tournamentName)
+    const players = managerObj.getPlayers(tournamentName) as playerObj[]
     const playerNames: object[] = []
 
-    players.map((player: object) => {
+    players.map((player) => {
       playerNames.push({
         firstName: player.firstname,
         lastName: player.lastname,
         rating: player.rating
+      })
+    })
+    return playerNames
+  })
+
+  type standingPlayer = {
+    firstname: string
+    lastname: string
+    rating: number
+    score: number
+  }
+
+  ipcMain.handle('getCurrentStandings', (_event, tournamentName) => {
+    const playerStandings = managerObj.getCurrentStandings(tournamentName) as standingPlayer[]
+    const playerNames: object[] = []
+
+    playerStandings.map((player) => {
+      playerNames.push({
+        firstName: player.firstname,
+        lastName: player.lastname,
+        rating: player.rating,
+        score: player.score
       })
     })
     return playerNames

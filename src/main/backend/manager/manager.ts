@@ -72,6 +72,11 @@ export default class Manager {
     console.log(`filled standings table ${tournamentName}_standings`)
   }
 
+  getCurrentStandings(tournamentName: string): object[] {
+    const sql = `SELECT * FROM ${tournamentName}_standings`
+    const playerStandings = this.db.prepare(sql).all()
+    return playerStandings
+  }
   checkStandings(tournamentName: string): boolean {
     const query = `SELECT name FROM sqlite_master WHERE type='table' AND name=?`
     const result = this.db.prepare(query).get(`${tournamentName}_standings`)
