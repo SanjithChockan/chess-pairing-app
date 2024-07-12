@@ -37,7 +37,13 @@ export default function CardTournamentForm(): JSX.Element {
     if (tourneyName !== 'None') {
       const standingsExist = await window.api.checkStandingsExist(tourneyName)
       if (standingsExist) {
-        navigate({ to: '/roundGenView/$tourneyName', params: { tourneyName } })
+        navigate({
+          to: '/roundGenView/$tourneyName',
+          params: { tourneyName },
+          search: {
+            tab: 'standings'
+          }
+        })
       } else {
         navigate({ to: '/editTournament', search: { tourneyName } })
       }
