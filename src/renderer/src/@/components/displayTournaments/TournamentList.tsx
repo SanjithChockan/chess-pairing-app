@@ -40,9 +40,7 @@ export default function CardTournamentForm(): JSX.Element {
         navigate({
           to: '/roundGenView/$tourneyName',
           params: { tourneyName },
-          search: {
-            tab: 'standings'
-          }
+
         })
       } else {
         navigate({ to: '/editTournament', search: { tourneyName } })

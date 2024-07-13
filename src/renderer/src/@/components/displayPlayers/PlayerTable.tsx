@@ -47,10 +47,7 @@ export default function PlayerGrid({ tourneyName }: propType): JSX.Element {
     await window.api.completeRegistration(tourneyName)
     navigate({
       to: '/standings/$tourneyName',
-      params: { tourneyName: tourneyName },
-      search: {
-        tab: 'standings'
-      }
+      params: { tourneyName: tourneyName }
     })
   }, [tourneyName, navigate])
 

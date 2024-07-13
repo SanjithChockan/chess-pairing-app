@@ -5,9 +5,13 @@ import { useNavigate } from '@tanstack/react-router'
 
 type propType = {
   tourneyName: string
+  onGeneratePairings: () => void
 }
 
-export default function CurrentStandings({ tourneyName }: propType): JSX.Element {
+export default function CurrentStandings({
+  tourneyName,
+  onGeneratePairings
+}: propType): JSX.Element {
   const gridRef = useRef<AgGridReact>(null)
   const [playersList, setPlayersState] = useState([
     { firstName: '', lastName: '', rating: 0, score: 0 }
@@ -37,13 +41,7 @@ export default function CurrentStandings({ tourneyName }: propType): JSX.Element
    */
   const generatePairings = useCallback(async () => {
     await window.api.completeRegistration(tourneyName)
-    navigate({
-      to: '/roundGenView/$tourneyName',
-      params: { tourneyName: tourneyName },
-      search: {
-        tab: 'pairing'
-      }
-    })
+    onGeneratePairings()
   }, [tourneyName, navigate])
 
   return (

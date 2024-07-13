@@ -1,27 +1,26 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@renderer/@/components/ui/tabs'
+import { useState } from 'react'
 import CurrentStandings from '@renderer/@/components/standings/CurrentStandings'
 
 export const Route = createFileRoute('/roundGenView/$tourneyName')({
-  validateSearch: (search: Record<string, unknown>) => {
-    return {
-      tab: search.tab as string
-    }
-  },
   component: TournamentPanel
 })
 
 function TournamentPanel(): JSX.Element {
   const { tourneyName } = Route.useParams()
-  const { tab } = Route.useSearch()
-  const defaultValue = tab === 'pairing' ? 'pairing' : 'standings'
-  console.log(`rerouted with default value ${defaultValue}`)
+  const [activeTab, setActiveTab] = useState<string>('standings')
+
+  const handleTabChange = (value: string): void => {
+    setActiveTab(value)
+  }
+
   return (
     <>
       <div>
         <h1>{tourneyName} Panel View </h1>
       </div>
-      <Tabs defaultValue={defaultValue}>
+      <Tabs value={activeTab} onValueChange={handleTabChange}>
         <div className="flex items-center">
           <TabsList>
             <TabsTrigger value="standings">Standings</TabsTrigger>
@@ -29,7 +28,10 @@ function TournamentPanel(): JSX.Element {
           </TabsList>
         </div>
         <TabsContent value="standings">
-          <CurrentStandings tourneyName={tourneyName}></CurrentStandings>
+          <CurrentStandings
+            tourneyName={tourneyName}
+            onGeneratePairings={() => handleTabChange('pairing')}
+          ></CurrentStandings>
         </TabsContent>
         <TabsContent value="pairing">
           <h1>Current Pairing</h1>
