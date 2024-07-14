@@ -1,5 +1,4 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
-import { Button } from '@renderer/@/components/ui/button'
+import { createFileRoute } from '@tanstack/react-router'
 import PlayerGrid from '@renderer/@/components/displayPlayers/PlayerTable'
 
 type tournamentSearch = {

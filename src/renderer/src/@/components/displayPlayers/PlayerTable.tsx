@@ -46,7 +46,7 @@ export default function PlayerGrid({ tourneyName }: propType): JSX.Element {
   const completeRegistration = useCallback(async () => {
     await window.api.completeRegistration(tourneyName)
     navigate({
-      to: '/standings/$tourneyName',
+      to: '/roundGenView/$tourneyName',
       params: { tourneyName: tourneyName }
     })
   }, [tourneyName, navigate])

@@ -22,6 +22,7 @@ import CardWrapper from './card-wrapper'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { useNavigate } from '@tanstack/react-router'
 
 const formSchema = z.object({
   tournamentName: z.string().trim().min(1, {
@@ -32,6 +33,7 @@ const formSchema = z.object({
 })
 
 export default function TournamentForm(): JSX.Element {
+  const navigate = useNavigate()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -44,7 +46,10 @@ export default function TournamentForm(): JSX.Element {
   function onSubmit(values: z.infer<typeof formSchema>): void {
     // use ipc to send data to backend for processing
     window.api.tournamentForm(values)
-    console.log(values)
+    navigate({
+      to: '/editTournament',
+      search: { tourneyName: values.tournamentName }
+    })
   }
 
   return (
