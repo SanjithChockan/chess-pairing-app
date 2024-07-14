@@ -107,6 +107,10 @@ app.whenReady().then(() => {
     return playerNames
   })
 
+  ipcMain.handle('generatePairings', (_event, tournamentName, roundNum) => {
+    managerObj.generatePairings(tournamentName, roundNum)
+  })
+
   type standingPlayer = {
     firstname: string
     lastname: string

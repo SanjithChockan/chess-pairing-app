@@ -36,11 +36,10 @@ export default function CurrentStandings({
   }, [])
 
   const navigate = useNavigate()
-  /**
-   * Rerouting to same page is not a solution to switch tabs. Figure out another way..
-   */
+
   const generatePairings = useCallback(async () => {
-    await window.api.completeRegistration(tourneyName)
+    // getting pairing data to display... pass to onGeneratePairings to display on pairing tab
+    await window.api.generatePairings(tourneyName, 0)
     onGeneratePairings()
   }, [tourneyName, navigate])
 

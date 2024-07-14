@@ -5,7 +5,7 @@ import { TanStackRouterVite } from '@tanstack/router-vite-plugin'
 
 export default defineConfig({
   main: {
-    plugins: [externalizeDepsPlugin()]
+    plugins: [externalizeDepsPlugin({ exclude: ['tournament-pairings'] })]
   },
   preload: {
     plugins: [externalizeDepsPlugin()]

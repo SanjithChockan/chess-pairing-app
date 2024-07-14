@@ -1,5 +1,5 @@
 import Database from 'better-sqlite3'
-import {Swiss} from 'tournament-pairings';
+import { Swiss } from 'tournament-pairings'
 
 type playerObject = {
   firstname: string
@@ -106,7 +106,7 @@ export default class Manager {
     })
     // returns an array of matches
     const matches = Swiss(playerObjects, roundNum)
-
+    console.log(JSON.stringify(matches))
     return
   }
 }

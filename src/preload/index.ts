@@ -11,6 +11,8 @@ export type ContextBridgeApi = {
   completeRegistration: (tournamentName) => Promise<void>
   checkStandingsExist: (tournamentName) => Promise<boolean>
   getCurrentStandings: (tournamentName) => Promise<object[]>
+
+  generatePairings: (tournamentName, roundNum ) => void
 }
 
 // Custom APIs for renderer
@@ -36,8 +38,12 @@ const api: ContextBridgeApi = {
   getCurrentStandings: async (tournamentName: string): Promise<object[]> => {
     const result: object[] = await ipcRenderer.invoke('getCurrentStandings', tournamentName)
     return result
-  }
+  },
 
+  generatePairings: (tournamentName: string, roundNum: number) => {
+    ipcRenderer.invoke('generatePairings', tournamentName, roundNum)
+    return
+  }
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to
