@@ -1,8 +1,15 @@
 import Database from 'better-sqlite3'
+import {Swiss} from 'tournament-pairings';
 
 type playerObject = {
   firstname: string
   lastname: string
+  rating: number
+}
+
+type swissPlayerObject = {
+  id: string
+  score: number
   rating: number
 }
 
@@ -77,9 +84,29 @@ export default class Manager {
     const playerStandings = this.db.prepare(sql).all()
     return playerStandings
   }
+
   checkStandings(tournamentName: string): boolean {
     const query = `SELECT name FROM sqlite_master WHERE type='table' AND name=?`
     const result = this.db.prepare(query).get(`${tournamentName}_standings`)
     return result !== undefined
+  }
+
+  generatePairings(tournamentName: string, roundNum: number): void {
+    const sql = `SELECT * FROM ${tournamentName}_standings`
+    const playerStandings = this.db.prepare(sql).all()
+    // call tournament-pairing api to generate pairings
+    const playerObjects: swissPlayerObject[] = []
+
+    playerStandings.map((player) => {
+      playerObjects.push({
+        id: player.firstname,
+        score: player.score,
+        rating: player.rating
+      })
+    })
+    // returns an array of matches
+    const matches = Swiss(playerObjects, roundNum)
+
+    return
   }
 }
