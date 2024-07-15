@@ -28,7 +28,6 @@ export default class Manager {
     // add tournament to tourney list
     const sql = 'INSERT INTO TourneyList (name) VALUES (?)'
     this.db.prepare(sql).run(name)
-    console.log('Added Tournament Table to DB')
 
     // create table for tournament to store player information
     const query = `CREATE TABLE IF NOT EXISTS ${name}_players(firstname TEXT NOT NULL, lastname TEXT NOT NULL, rating INT)`
@@ -76,7 +75,6 @@ export default class Manager {
       const fill_query = `INSERT INTO ${tournamentName}_standings (firstname, lastname, rating, score) VALUES (?, ?, ?, ?)`
       this.db.prepare(fill_query).run(firstname, lastname, rating, 0)
     })
-    console.log(`filled standings table ${tournamentName}_standings`)
   }
 
   getCurrentStandings(tournamentName: string): object[] {
@@ -87,9 +85,7 @@ export default class Manager {
 
   checkStandings(tournamentName: string): boolean {
     const query = `SELECT name FROM sqlite_master WHERE type='table' AND lower(name)=lower(?)`
-    console.log(`${tournamentName}_standings`)
     const result = this.db.prepare(query).get(`${tournamentName}_standings`)
-    console.log(result)
     return result !== undefined
   }
 
