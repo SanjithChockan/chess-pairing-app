@@ -52,7 +52,7 @@ app.whenReady().then(() => {
   const managerObj = getManagerObj()
   // IPC Handlers
   ipcMain.on('tournamentForm', (_event, data) => {
-    managerObj.createTournament(data.tournamentName)
+    managerObj.createTournament(data.tournamentName, data.roundNum)
   })
 
   ipcMain.on('registerPlayer', (_event, data) => {

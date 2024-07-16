@@ -24,17 +24,23 @@ export default class Manager {
     this.format = format
   }
 
-  createTournament(name: string): void {
+  createTournament(name: string, roundNums: number): void {
+    const createTourneyListQuery = `CREATE TABLE IF NOT EXISTS TourneyList(name TEXT NOT NULL, totalRounds INT NOT NULL, roundsComplete INT NOT NULL)`
+    this.db.exec(createTourneyListQuery)
+
     // add tournament to tourney list
-    const sql = 'INSERT INTO TourneyList (name) VALUES (?)'
-    this.db.prepare(sql).run(name)
+    const insertTourneyQuery =
+      'INSERT INTO TourneyList (name, totalRounds, roundsComplete) VALUES (?, ?, ?)'
+    this.db.prepare(insertTourneyQuery).run(name, roundNums, 0)
 
     // create table for tournament to store player information
-    const query = `CREATE TABLE IF NOT EXISTS ${name}_players(firstname TEXT NOT NULL, lastname TEXT NOT NULL, rating INT)`
-    this.db.exec(query)
+    const createPlayersTableQuery = `CREATE TABLE IF NOT EXISTS ${name}_players(firstname TEXT NOT NULL, lastname TEXT NOT NULL, rating INT)`
+    this.db.exec(createPlayersTableQuery)
   }
 
   loadTournaments(): object[] {
+    const createTourneyListQuery = `CREATE TABLE IF NOT EXISTS TourneyList(name TEXT NOT NULL, totalRounds INT NOT NULL, roundsComplete INT NOT NULL)`
+    this.db.exec(createTourneyListQuery)
     // fetch rows from table and return it as list of string
     const sql = `SELECT * FROM TourneyList`
     const names = this.db.prepare(sql).all()
@@ -54,14 +60,12 @@ export default class Manager {
   }
 
   deletePlayer(playerInfo: object, tournamentName: string): void {
-    console.log(playerInfo)
     const { firstName, lastName, rating } = playerInfo[0]
     const sql = `DELETE FROM ${tournamentName}_players WHERE firstname = ? AND lastname = ? AND rating = ?`
     this.db.prepare(sql).run(firstName, lastName, rating)
   }
 
   createStandings(tournamentName: string): void {
-    console.log(tournamentName)
     // create standings table
     const query = `CREATE TABLE IF NOT EXISTS ${tournamentName}_standings(firstname TEXT NOT NULL, lastname TEXT NOT NULL, rating INT, score INT)`
     this.db.exec(query)

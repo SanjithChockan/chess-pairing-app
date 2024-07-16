@@ -12,7 +12,7 @@ export type ContextBridgeApi = {
   checkStandingsExist: (tournamentName) => Promise<boolean>
   getCurrentStandings: (tournamentName) => Promise<object[]>
 
-  generatePairings: (tournamentName, roundNum ) => void
+  generatePairings: (tournamentName, roundNum) => void
 }
 
 // Custom APIs for renderer
