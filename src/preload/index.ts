@@ -12,7 +12,7 @@ export type ContextBridgeApi = {
   checkStandingsExist: (tournamentName) => Promise<boolean>
   getCurrentStandings: (tournamentName) => Promise<object[]>
 
-  generatePairings: (tournamentName, roundNum) => void
+  generatePairings: (tournamentName) => void
 }
 
 // Custom APIs for renderer
@@ -40,8 +40,8 @@ const api: ContextBridgeApi = {
     return result
   },
 
-  generatePairings: (tournamentName: string, roundNum: number) => {
-    ipcRenderer.invoke('generatePairings', tournamentName, roundNum)
+  generatePairings: (tournamentName: string) => {
+    ipcRenderer.invoke('generatePairings', tournamentName)
     return
   }
 }

@@ -93,7 +93,7 @@ export default class Manager {
     return result !== undefined
   }
 
-  generatePairings(tournamentName: string, roundNum: number): void {
+  generatePairings(tournamentName: string): void {
     const sql = `SELECT * FROM ${tournamentName}_standings`
     const playerStandings = this.db.prepare(sql).all()
     // call tournament-pairing api to generate pairings
@@ -106,8 +106,14 @@ export default class Manager {
         rating: player.rating
       })
     })
+    // retrive from tourneylist table
+    const currentRoundQuery = 'SELECT roundsComplete FROM TourneyList WHERE name = ?'
+    console.log(tournamentName)
+    // for some reason, tournamentName is always lower cased when sent from frontend.
+    const roundNum = this.db.prepare(currentRoundQuery).get(tournamentName)
+    console.log(JSON.stringify(roundNum))
     // returns an array of matches
-    const matches = Swiss(playerObjects, roundNum)
+    const matches = Swiss(playerObjects, roundNum + 1)
     console.log(JSON.stringify(matches))
     return
   }

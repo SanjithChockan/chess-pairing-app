@@ -39,7 +39,7 @@ export default function CurrentStandings({
 
   const generatePairings = useCallback(async () => {
     // getting pairing data to display... pass to onGeneratePairings to display on pairing tab
-    await window.api.generatePairings(tourneyName, 0)
+    await window.api.generatePairings(tourneyName)
     onGeneratePairings()
   }, [tourneyName, navigate])
 
