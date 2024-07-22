@@ -65,7 +65,7 @@ export default function CardTournamentForm(): JSX.Element {
                 </SelectTrigger>
                 <SelectContent position="popper">
                   {tourneyList.map((option) => (
-                    <SelectItem key={option.toLowerCase()} value={option.toLowerCase()}>
+                    <SelectItem key={option.toLowerCase()} value={option}>
                       {option}
                     </SelectItem>
                   ))}
