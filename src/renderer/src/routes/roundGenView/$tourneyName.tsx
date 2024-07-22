@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@renderer/@/components/ui/tabs'
 import { useState } from 'react'
 import CurrentStandings from '@renderer/@/components/standings/CurrentStandings'
+import PairingView from '@renderer/@/components/pairing/PairingView'
 
 export const Route = createFileRoute('/roundGenView/$tourneyName')({
   component: TournamentPanel
@@ -10,8 +11,10 @@ export const Route = createFileRoute('/roundGenView/$tourneyName')({
 function TournamentPanel(): JSX.Element {
   const { tourneyName } = Route.useParams()
   const [activeTab, setActiveTab] = useState<string>('standings')
+  const [currentPairings, setCurrentPairings] = useState<object[]>([])
 
-  const handleTabChange = (value: string): void => {
+  const handleTabChange = (value: string, matches): void => {
+    setCurrentPairings(matches)
     setActiveTab(value)
   }
 
@@ -30,11 +33,12 @@ function TournamentPanel(): JSX.Element {
         <TabsContent value="standings">
           <CurrentStandings
             tourneyName={tourneyName}
-            onGeneratePairings={() => handleTabChange('pairing')}
+            onGeneratePairings={(matches) => handleTabChange('pairing', matches)}
           ></CurrentStandings>
         </TabsContent>
         <TabsContent value="pairing">
           <h1>Current Pairing</h1>
+          <PairingView tourneyName={tourneyName} pairings={currentPairings}></PairingView> 
         </TabsContent>
       </Tabs>
     </>

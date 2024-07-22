@@ -5,7 +5,7 @@ import { useNavigate } from '@tanstack/react-router'
 
 type propType = {
   tourneyName: string
-  onGeneratePairings: () => void
+  onGeneratePairings: (data) => void
 }
 
 export default function CurrentStandings({
@@ -39,8 +39,8 @@ export default function CurrentStandings({
 
   const generatePairings = useCallback(async () => {
     // getting pairing data to display... pass to onGeneratePairings to display on pairing tab
-    await window.api.generatePairings(tourneyName)
-    onGeneratePairings()
+    const matches = await window.api.generatePairings(tourneyName)
+    onGeneratePairings(matches)
   }, [tourneyName, navigate])
 
   return (

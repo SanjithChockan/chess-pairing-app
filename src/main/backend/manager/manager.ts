@@ -93,7 +93,7 @@ export default class Manager {
     return result !== undefined
   }
 
-  generatePairings(tournamentName: string): void {
+  generatePairings(tournamentName: string): object[] {
     const sql = `SELECT * FROM ${tournamentName}_standings`
     const playerStandings = this.db.prepare(sql).all()
     // call tournament-pairing api to generate pairings
@@ -115,6 +115,6 @@ export default class Manager {
     // returns an array of matches
     const matches = Swiss(playerObjects, roundNumObj.roundsComplete + 1)
     console.log(JSON.stringify(matches))
-    return
+    return matches
   }
 }

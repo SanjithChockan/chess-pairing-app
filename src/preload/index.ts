@@ -40,9 +40,9 @@ const api: ContextBridgeApi = {
     return result
   },
 
-  generatePairings: (tournamentName: string) => {
-    ipcRenderer.invoke('generatePairings', tournamentName)
-    return
+  generatePairings: async (tournamentName: string) => {
+    const result = ipcRenderer.invoke('generatePairings', tournamentName)
+    return result
   }
 }
 
