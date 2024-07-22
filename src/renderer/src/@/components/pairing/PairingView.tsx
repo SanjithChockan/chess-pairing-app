@@ -60,6 +60,8 @@ export default function PairingView({ tourneyName, pairings }: propType): JSX.El
         p.match === params.data.match ? { ...p, result: params.newValue } : p
       )
       setRowData(updatedPairings)
+      // update result value in backend
+      window.api.updateMatchResult(tourneyName, params.data.match, params.newValue)
     }
   }
 
