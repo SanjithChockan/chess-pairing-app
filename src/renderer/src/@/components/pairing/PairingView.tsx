@@ -3,13 +3,6 @@ import { AgGridReact } from 'ag-grid-react'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import { Button } from '@renderer/@/components/ui/button'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@renderer/@/components/ui/select'
 
 interface Pairing {
   match: number
@@ -21,13 +14,15 @@ type propType = {
   tourneyName: string
   pairings: object[]
 }
+const resultOptions = [
+  { value: '1-0', label: '1-0' },
+  { value: '1/2-1/2', label: '1/2-1/2' },
+  { value: '0-1', label: '0-1' }
+]
 
 function PairingView({ tourneyName, pairings }: propType): JSX.Element {
-  const resultOptions = [
-    { value: '1-0', label: '1-0' },
-    { value: '1/2-1/2', label: '1/2-1/2' },
-    { value: '0-1', label: '0-1' }
-  ]
+  // TODO: If pairing is None, check whether it the table for current_round exists and still in progress -> display
+
   const [rowData, setRowData] = useState(pairings)
   const columnDefs = useMemo(
     () => [
@@ -50,7 +45,7 @@ function PairingView({ tourneyName, pairings }: propType): JSX.Element {
 
   const onCellValueChanged = (params: any) => {
     if (params.column.colId === 'result') {
-      const updatedPairings = rowData.map(p =>
+      const updatedPairings = rowData.map((p) =>
         p.match === params.data.match ? { ...p, result: params.newValue } : p
       )
       setRowData(updatedPairings)

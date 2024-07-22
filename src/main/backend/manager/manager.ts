@@ -25,13 +25,13 @@ export default class Manager {
   }
 
   createTournament(name: string, roundNums: number): void {
-    const createTourneyListQuery = `CREATE TABLE IF NOT EXISTS TourneyList(name TEXT NOT NULL, totalRounds INT NOT NULL, roundsComplete INT NOT NULL)`
+    const createTourneyListQuery = `CREATE TABLE IF NOT EXISTS TourneyList(name TEXT NOT NULL, totalRounds INT NOT NULL, roundsComplete INT NOT NULL, roundInProgress INT NOT NULL)`
     this.db.exec(createTourneyListQuery)
 
     // add tournament to tourney list
     const insertTourneyQuery =
-      'INSERT INTO TourneyList (name, totalRounds, roundsComplete) VALUES (?, ?, ?)'
-    this.db.prepare(insertTourneyQuery).run(name, roundNums, 0)
+      'INSERT INTO TourneyList (name, totalRounds, roundsComplete, roundInProgress) VALUES (?, ?, ?, ?)'
+    this.db.prepare(insertTourneyQuery).run(name, roundNums, 0, 0)
 
     // create table for tournament to store player information
     const createPlayersTableQuery = `CREATE TABLE IF NOT EXISTS ${name}_players(firstname TEXT NOT NULL, lastname TEXT NOT NULL, rating INT)`
@@ -108,13 +108,9 @@ export default class Manager {
     })
     // retrive from tourneylist table
     const currentRoundQuery = 'SELECT roundsComplete FROM TourneyList WHERE name = ?'
-    console.log(tournamentName)
-    // for some reason, tournamentName is always lower cased when sent from frontend.
     const roundNumObj = this.db.prepare(currentRoundQuery).get(tournamentName)
-    console.log(roundNumObj.roundsComplete)
     // returns an array of matches
     const matches = Swiss(playerObjects, roundNumObj.roundsComplete + 1)
-    console.log(JSON.stringify(matches))
 
     // create table to store pairing round
     const createPairingTableQuery = `CREATE TABLE IF NOT EXISTS ${tournamentName}_round_${roundNumObj.roundsComplete + 1}(match_id INT NOT NULL, player1 TEXT NOT NULL, result TEXT NOT NULL, player2 TEXT NOT NULL)`
@@ -126,5 +122,14 @@ export default class Manager {
       this.db.prepare(fill_query).run(match, player1, '00', player2)
     })
     return matches
+  }
+
+  updateResult(tournamentName, match_id, result): void {
+    const currentRoundQuery = 'SELECT roundsComplete FROM TourneyList WHERE name = ?'
+    const roundNumObj = this.db.prepare(currentRoundQuery).get(tournamentName)
+    const updateResultQuery = `UPDATE ${tournamentName}_round_${roundNumObj.roundsComplete + 1} SET result=? WHERE match_id=?`
+    this.db.prepare(updateResultQuery).run(result, match_id)
+
+    return
   }
 }

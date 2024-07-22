@@ -13,7 +13,11 @@ function TournamentPanel(): JSX.Element {
   const [activeTab, setActiveTab] = useState<string>('standings')
   const [currentPairings, setCurrentPairings] = useState<object[]>([])
 
-  const handleTabChange = (value: string, matches): void => {
+  const handleTabChange = (value: string): void => {
+    setActiveTab(value)
+  }
+
+  const handlePairing = (value: string, matches): void => {
     setCurrentPairings(matches)
     setActiveTab(value)
   }
@@ -33,12 +37,12 @@ function TournamentPanel(): JSX.Element {
         <TabsContent value="standings">
           <CurrentStandings
             tourneyName={tourneyName}
-            onGeneratePairings={(matches) => handleTabChange('pairing', matches)}
+            onGeneratePairings={(matches) => handlePairing('pairing', matches)}
           ></CurrentStandings>
         </TabsContent>
         <TabsContent value="pairing">
           <h1>Current Pairing</h1>
-          <PairingView tourneyName={tourneyName} pairings={currentPairings}></PairingView> 
+          <PairingView tourneyName={tourneyName} pairings={currentPairings}></PairingView>
         </TabsContent>
       </Tabs>
     </>
