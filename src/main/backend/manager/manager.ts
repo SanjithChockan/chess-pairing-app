@@ -93,7 +93,25 @@ export default class Manager {
     return result !== undefined
   }
 
-  generatePairings(tournamentName: string): object[] {
+  checkRoundInProgress(tournamentName: string): boolean {
+    const query = `SELECT name FROM TourneyList WHERE name=? AND roundInProgress=?`
+    const result = this.db.prepare(query).get(tournamentName, 1)
+    return result !== undefined
+  }
+
+  getCurrentRound(tournamentName: string): number {
+    // retrive from tourneylist table
+    const currentRoundQuery = 'SELECT roundsComplete FROM TourneyList WHERE name = ?'
+    const roundNumObj = this.db.prepare(currentRoundQuery).get(tournamentName)
+    return roundNumObj.roundsComplete + 1
+  }
+
+  generatePairings(tournamentName: string): void {
+    // set roundInProgress for tournamentName to 1
+    const setRoundInProgressQuery = `UPDATE TourneyList SET roundInProgress=? WHERE name=?`
+    this.db.prepare(setRoundInProgressQuery).run(1, tournamentName)
+    console.log(`set ${tournamentName}'s roundInProgress to 1`)
+
     const sql = `SELECT * FROM ${tournamentName}_standings`
     const playerStandings = this.db.prepare(sql).all()
     // call tournament-pairing api to generate pairings
@@ -106,30 +124,51 @@ export default class Manager {
         rating: player.rating
       })
     })
-    // retrive from tourneylist table
-    const currentRoundQuery = 'SELECT roundsComplete FROM TourneyList WHERE name = ?'
-    const roundNumObj = this.db.prepare(currentRoundQuery).get(tournamentName)
+
+    const currentRound = this.getCurrentRound(tournamentName)
     // returns an array of matches
-    const matches = Swiss(playerObjects, roundNumObj.roundsComplete + 1)
+    const matches = Swiss(playerObjects, currentRound)
 
     // create table to store pairing round
-    const createPairingTableQuery = `CREATE TABLE IF NOT EXISTS ${tournamentName}_round_${roundNumObj.roundsComplete + 1}(match_id INT NOT NULL, player1 TEXT NOT NULL, result TEXT NOT NULL, player2 TEXT NOT NULL)`
+    const createPairingTableQuery = `CREATE TABLE IF NOT EXISTS ${tournamentName}_round_${currentRound}(match_id INT NOT NULL, player1 TEXT NOT NULL, result TEXT NOT NULL, player2 TEXT NOT NULL)`
     this.db.exec(createPairingTableQuery)
+
     // populate table
     matches.forEach((matchPair) => {
       const { match, player1, player2 } = matchPair
-      const fill_query = `INSERT INTO ${tournamentName}_round_${roundNumObj.roundsComplete + 1} (match_id, player1, result, player2) VALUES (?, ?, ?, ?)`
-      this.db.prepare(fill_query).run(match, player1, '00', player2)
+      const fill_query = `INSERT INTO ${tournamentName}_round_${currentRound} (match_id, player1, result, player2) VALUES (?, ?, ?, ?)`
+      this.db.prepare(fill_query).run(match, player1, 'x-x', player2)
     })
+    return
+  }
+
+  getPairings(tournamentName): object[] {
+    const currentRound = this.getCurrentRound(tournamentName)
+    const sql = `SELECT * FROM ${tournamentName}_round_${currentRound}`
+    const pairings = this.db.prepare(sql).all()
+    const matches: object[] = []
+    pairings.map((pair) =>
+      matches.push({
+        match: pair.match_id,
+        player1: pair.player1,
+        result: pair.result,
+        player2: pair.player2
+      })
+    )
     return matches
   }
 
   updateResult(tournamentName, match_id, result): void {
-    const currentRoundQuery = 'SELECT roundsComplete FROM TourneyList WHERE name = ?'
-    const roundNumObj = this.db.prepare(currentRoundQuery).get(tournamentName)
-    const updateResultQuery = `UPDATE ${tournamentName}_round_${roundNumObj.roundsComplete + 1} SET result=? WHERE match_id=?`
+    const currentRound = this.getCurrentRound(tournamentName)
+    const updateResultQuery = `UPDATE ${tournamentName}_round_${currentRound} SET result=? WHERE match_id=?`
     this.db.prepare(updateResultQuery).run(result, match_id)
+    return
+  }
 
+  completeRound(tournamentName): void {
+    // calculate new score based on result on each match
+    // update standings
+    console.log(tournamentName)
     return
   }
 }

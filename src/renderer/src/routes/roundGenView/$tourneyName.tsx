@@ -25,7 +25,7 @@ function TournamentPanel(): JSX.Element {
   return (
     <>
       <div>
-        <h1>{tourneyName} Panel View </h1>
+        <h1>{tourneyName} </h1>
       </div>
       <Tabs value={activeTab} onValueChange={handleTabChange}>
         <div className="flex items-center">
@@ -41,7 +41,7 @@ function TournamentPanel(): JSX.Element {
           ></CurrentStandings>
         </TabsContent>
         <TabsContent value="pairing">
-          <h1>Current Pairing</h1>
+          <h1>Round # Pairing</h1>
           <PairingView tourneyName={tourneyName} pairings={currentPairings}></PairingView>
         </TabsContent>
       </Tabs>

@@ -112,17 +112,13 @@ app.whenReady().then(() => {
   })
 
   ipcMain.handle('generatePairings', (_event, tournamentName) => {
-    const generatedMatches = managerObj.generatePairings(tournamentName)
-    const matches: object[] = []
-    generatedMatches.map((matchData) => {
-      matches.push({
-        match: matchData.match,
-        player1: matchData.player1,
-        result: '-',
-        player2: matchData.player2
-      })
-    })
-    return matches
+    managerObj.generatePairings(tournamentName)
+    return
+  })
+
+  ipcMain.handle('getPairings', (_event, tournamentName) => {
+    const generatedMatches = managerObj.getPairings(tournamentName)
+    return generatedMatches
   })
 
   type standingPlayer = {

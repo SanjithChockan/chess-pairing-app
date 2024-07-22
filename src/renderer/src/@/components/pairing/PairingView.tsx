@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
@@ -20,10 +20,21 @@ const resultOptions = [
   { value: '0-1', label: '0-1' }
 ]
 
-function PairingView({ tourneyName, pairings }: propType): JSX.Element {
-  // TODO: If pairing is None, check whether it the table for current_round exists and still in progress -> display
+export default function PairingView({ tourneyName, pairings }: propType): JSX.Element {
+  // TODO: If clicked on pairing tab than generate from standings, check whether the table tourneyName_round_current exists -> display matches
+  // If roundInProgress=1, don't gray out 'Complete' button
+  // else gray out
 
   const [rowData, setRowData] = useState(pairings)
+
+  useEffect(() => {
+    const f = async (): Promise<void> => {
+      const names = await window.api.getPairings(tourneyName)
+      setRowData(names)
+    }
+    f()
+  }, [])
+
   const columnDefs = useMemo(
     () => [
       { headerName: 'Match', field: 'match', width: 100 },
@@ -55,6 +66,7 @@ function PairingView({ tourneyName, pairings }: propType): JSX.Element {
   const handleComplete = async (): Promise<void> => {
     // Sending back results to backend for processing
     console.log('Completed round. -> send data back')
+    // set roundInProgress back to 0
   }
 
   return (
@@ -72,5 +84,3 @@ function PairingView({ tourneyName, pairings }: propType): JSX.Element {
     </div>
   )
 }
-
-export default PairingView

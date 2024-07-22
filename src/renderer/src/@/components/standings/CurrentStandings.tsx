@@ -29,18 +29,16 @@ export default function CurrentStandings({
       const names = await window.api.getCurrentStandings(tourneyName)
       setPlayersState(names)
       setRowData(names)
-      console.log('retrieved current standings data')
-      console.log(`standings player names: ${names}`)
     }
     f()
   }, [])
 
   const navigate = useNavigate()
-
+  // gray out button if roundInProgress = 1
   const generatePairings = useCallback(async () => {
     // getting pairing data to display... pass to onGeneratePairings to display on pairing tab
-    const matches = await window.api.generatePairings(tourneyName)
-    onGeneratePairings(matches)
+    await window.api.generatePairings(tourneyName)
+    onGeneratePairings([])
   }, [tourneyName, navigate])
 
   return (
