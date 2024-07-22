@@ -110,10 +110,10 @@ export default class Manager {
     const currentRoundQuery = 'SELECT roundsComplete FROM TourneyList WHERE name = ?'
     console.log(tournamentName)
     // for some reason, tournamentName is always lower cased when sent from frontend.
-    const roundNum = this.db.prepare(currentRoundQuery).get(tournamentName)
-    console.log(JSON.stringify(roundNum))
+    const roundNumObj = this.db.prepare(currentRoundQuery).get(tournamentName)
+    console.log(roundNumObj.roundsComplete)
     // returns an array of matches
-    const matches = Swiss(playerObjects, roundNum + 1)
+    const matches = Swiss(playerObjects, roundNumObj.roundsComplete + 1)
     console.log(JSON.stringify(matches))
     return
   }
