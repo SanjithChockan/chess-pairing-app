@@ -114,7 +114,7 @@ app.whenReady().then(() => {
       matches.push({
         match: matchData.match,
         player1: matchData.player1,
-        result: '',
+        result: '-',
         player2: matchData.player2
       })
     })

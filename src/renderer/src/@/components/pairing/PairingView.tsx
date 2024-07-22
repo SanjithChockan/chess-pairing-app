@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
@@ -23,44 +23,38 @@ type propType = {
 }
 
 function PairingView({ tourneyName, pairings }: propType): JSX.Element {
-  const [rowData, setRowData] = useState(pairings)
-  const columnDefs = [
-    { headerName: 'Match', field: 'match', width: 100 },
-    { headerName: 'Player 1', field: 'player1', width: 150 },
-    {
-      headerName: 'Result',
-      field: 'result',
-      width: 150,
-      cellRenderer: 'resultSelector',
-      cellRendererParams: {
-        onChange: (data: Pairing, value: string): void => {
-          console.log('updating value on table')
-          const updatedPairings = pairings.map((p) =>
-            p.match === data.match ? { ...p, result: value } : p
-          )
-          setRowData(updatedPairings)
-        }
-      }
-    },
-    { headerName: 'Player 2', field: 'player2', width: 150 }
+  const resultOptions = [
+    { value: '1-0', label: '1-0' },
+    { value: '1/2-1/2', label: '1/2-1/2' },
+    { value: '0-1', label: '0-1' }
   ]
+  const [rowData, setRowData] = useState(pairings)
+  const columnDefs = useMemo(
+    () => [
+      { headerName: 'Match', field: 'match', width: 100 },
+      { headerName: 'Player 1', field: 'player1', width: 150 },
+      {
+        headerName: 'Result',
+        field: 'result',
+        width: 150,
+        cellEditor: 'agSelectCellEditor',
+        cellEditorParams: {
+          values: resultOptions.map((option) => option.value)
+        },
+        editable: true
+      },
+      { headerName: 'Player 2', field: 'player2', width: 150 }
+    ],
+    []
+  )
 
-  const ResultSelector = (props: any): JSX.Element => {
-    const options = ['1-0', '1/2-1/2', '0-1']
-    return (
-      <Select onValueChange={(value) => props.onChange(props.data, value)}>
-        <SelectTrigger>
-          <SelectValue placeholder="" />
-        </SelectTrigger>
-        <SelectContent>
-          {options.map((option) => (
-            <SelectItem key={option} value={option}>
-              {option}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    )
+  const onCellValueChanged = (params: any) => {
+    if (params.column.colId === 'result') {
+      const updatedPairings = rowData.map(p =>
+        p.match === params.data.match ? { ...p, result: params.newValue } : p
+      )
+      setRowData(updatedPairings)
+    }
   }
 
   const handleComplete = async (): Promise<void> => {
@@ -73,9 +67,9 @@ function PairingView({ tourneyName, pairings }: propType): JSX.Element {
       <AgGridReact
         columnDefs={columnDefs}
         rowData={rowData}
-        components={{
-          resultSelector: ResultSelector
-        }}
+        onCellValueChanged={onCellValueChanged}
+        immutableData={true}
+        getRowId={(params) => params.data.match.toString()}
       />
       <Button onClick={handleComplete} className="mt-4">
         Complete Round
