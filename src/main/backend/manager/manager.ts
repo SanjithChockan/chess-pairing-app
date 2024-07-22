@@ -115,6 +115,16 @@ export default class Manager {
     // returns an array of matches
     const matches = Swiss(playerObjects, roundNumObj.roundsComplete + 1)
     console.log(JSON.stringify(matches))
+
+    // create table to store pairing round
+    const createPairingTableQuery = `CREATE TABLE IF NOT EXISTS ${tournamentName}_round_${roundNumObj.roundsComplete + 1}(match_id INT NOT NULL, player1 TEXT NOT NULL, result TEXT NOT NULL, player2 TEXT NOT NULL)`
+    this.db.exec(createPairingTableQuery)
+    // populate table
+    matches.forEach((matchPair) => {
+      const { match, player1, player2 } = matchPair
+      const fill_query = `INSERT INTO ${tournamentName}_round_${roundNumObj.roundsComplete + 1} (match_id, player1, result, player2) VALUES (?, ?, ?, ?)`
+      this.db.prepare(fill_query).run(match, player1, '00', player2)
+    })
     return matches
   }
 }
