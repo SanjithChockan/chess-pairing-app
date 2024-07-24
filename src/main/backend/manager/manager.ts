@@ -39,7 +39,7 @@ export default class Manager {
   }
 
   loadTournaments(): object[] {
-    const createTourneyListQuery = `CREATE TABLE IF NOT EXISTS TourneyList(name TEXT NOT NULL, totalRounds INT NOT NULL, roundsComplete INT NOT NULL)`
+    const createTourneyListQuery = `CREATE TABLE IF NOT EXISTS TourneyList(name TEXT NOT NULL, totalRounds INT NOT NULL, roundsComplete INT NOT NULL, roundInProgress INT NOT NULL)`
     this.db.exec(createTourneyListQuery)
     // fetch rows from table and return it as list of string
     const sql = `SELECT * FROM TourneyList`
@@ -67,7 +67,7 @@ export default class Manager {
 
   createStandings(tournamentName: string): void {
     // create standings table
-    const query = `CREATE TABLE IF NOT EXISTS ${tournamentName}_standings(firstname TEXT NOT NULL, lastname TEXT NOT NULL, rating INT, score INT)`
+    const query = `CREATE TABLE IF NOT EXISTS ${tournamentName}_standings(firstname TEXT NOT NULL, lastname TEXT NOT NULL, rating INT, score FLOAT)`
     this.db.exec(query)
 
     // fill table with players and score of zero
@@ -96,7 +96,7 @@ export default class Manager {
   checkRoundInProgress(tournamentName: string): boolean {
     const query = `SELECT name FROM TourneyList WHERE name=? AND roundInProgress=?`
     const result = this.db.prepare(query).get(tournamentName, 1)
-    console.log(result)
+    console.log(`roundInProgress value: ${result}`)
     return result !== undefined
   }
 
@@ -120,7 +120,7 @@ export default class Manager {
 
     playerStandings.map((player) => {
       playerObjects.push({
-        id: player.firstname,
+        id: `${player.firstname} ${player.lastname}`,
         score: player.score,
         rating: player.rating
       })
@@ -145,6 +145,14 @@ export default class Manager {
 
   getPairings(tournamentName): object[] {
     const currentRound = this.getCurrentRound(tournamentName)
+
+    // check if current round has been generated; return empty list other wise
+    const query = `SELECT name FROM sqlite_master WHERE type='table' AND lower(name)=lower(?)`
+    const result = this.db.prepare(query).get(`${tournamentName}_round_${tournamentName}`)
+    if (result === undefined) {
+      return []
+    }
+
     const sql = `SELECT * FROM ${tournamentName}_round_${currentRound}`
     const pairings = this.db.prepare(sql).all()
     const matches: object[] = []
@@ -156,10 +164,12 @@ export default class Manager {
         player2: pair.player2
       })
     )
+
     return matches
   }
 
   updateResult(tournamentName, match_id, result): void {
+    // update result for a match in current round
     const currentRound = this.getCurrentRound(tournamentName)
     const updateResultQuery = `UPDATE ${tournamentName}_round_${currentRound} SET result=? WHERE match_id=?`
     this.db.prepare(updateResultQuery).run(result, match_id)
@@ -167,22 +177,31 @@ export default class Manager {
   }
 
   completeRound(tournamentName): void {
-    // calculate new score based on result on each match
-    // update standings
     console.log(`Completing round for ${tournamentName}`)
-    // to update round
-    const currentRound = this.getCurrentRound(tournamentName)
-    // get results from current_round
+
+    // get results from current_round and update score for standings
     const matches = this.getPairings(tournamentName)
+    const drawQuery = `UPDATE ${tournamentName}_standings SET score = score + ${0.5} WHERE firstname=? AND lastname=?`
+    const winQuery = `UPDATE ${tournamentName}_standings SET score = score + ${1} WHERE firstname=? AND lastname=?`
     matches.map((pair) => {
+      const [p1_firstname, p1_lastname] = pair.player1
+      const [p2_firstname, p2_lastname] = pair.player2
+
       if (pair.result == '1/2-1/2') {
-        console.log(`draw between ${pair.player1} and ${pair.player2}`)
+        this.db.prepare(drawQuery).run(p1_firstname, p1_lastname)
+        this.db.prepare(drawQuery).run(p2_firstname, p2_lastname)
       } else if (pair.result == '1-0') {
-        console.log(`player1 ${pair.player1} beat ${pair.player2}`)
+        this.db.prepare(winQuery).run(p1_firstname, p1_lastname)
       } else if (pair.result == '0-1') {
-        console.log(`player1 ${pair.player1} beat ${pair.player2}`)
+        this.db.prepare(winQuery).run(p2_firstname, p2_lastname)
       }
     })
+
+    // * CHANGE is round in progress to false
+
+    // update round if not final round
+
+    // if final - complete tournament (display final standings)
     return
   }
 }
