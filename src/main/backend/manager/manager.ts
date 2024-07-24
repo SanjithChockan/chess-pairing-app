@@ -169,7 +169,20 @@ export default class Manager {
   completeRound(tournamentName): void {
     // calculate new score based on result on each match
     // update standings
-    console.log(tournamentName)
+    console.log(`Completing round for ${tournamentName}`)
+    // to update round
+    const currentRound = this.getCurrentRound(tournamentName)
+    // get results from current_round
+    const matches = this.getPairings(tournamentName)
+    matches.map((pair) => {
+      if (pair.result == '1/2-1/2') {
+        console.log(`draw between ${pair.player1} and ${pair.player2}`)
+      } else if (pair.result == '1-0') {
+        console.log(`player1 ${pair.player1} beat ${pair.player2}`)
+      } else if (pair.result == '0-1') {
+        console.log(`player1 ${pair.player1} beat ${pair.player2}`)
+      }
+    })
     return
   }
 }

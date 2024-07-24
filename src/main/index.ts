@@ -96,6 +96,11 @@ app.whenReady().then(() => {
     return tourneyNames
   })
 
+  ipcMain.handle('completeRound', (_event, tournamentName) => {
+    managerObj.completeRound(tournamentName)
+    return
+  })
+
   type playerObj = {
     firstname: string
     lastname: string

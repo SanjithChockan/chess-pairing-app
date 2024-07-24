@@ -13,6 +13,7 @@ interface Pairing {
 type propType = {
   tourneyName: string
   pairings: object[]
+  onCompleteRound: () => void
 }
 const resultOptions = [
   { value: '1-0', label: '1-0' },
@@ -20,7 +21,11 @@ const resultOptions = [
   { value: '0-1', label: '0-1' }
 ]
 
-export default function PairingView({ tourneyName, pairings }: propType): JSX.Element {
+export default function PairingView({
+  tourneyName,
+  pairings,
+  onCompleteRound
+}: propType): JSX.Element {
   // TODO: If clicked on pairing tab than generate from standings, check whether the table tourneyName_round_current exists -> display matches
   // If roundInProgress=1, don't gray out 'Complete' button
   // else gray out
@@ -67,7 +72,10 @@ export default function PairingView({ tourneyName, pairings }: propType): JSX.El
 
   const handleComplete = async (): Promise<void> => {
     // Sending back results to backend for processing
-    console.log('Completed round. -> send data back')
+    console.log('Completed round. Update standings')
+    await window.api.completeRound(tourneyName)
+    console.log('sent to backend')
+    onCompleteRound()
     // set roundInProgress back to 0
   }
 

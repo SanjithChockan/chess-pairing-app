@@ -22,6 +22,11 @@ function TournamentPanel(): JSX.Element {
     setActiveTab(value)
   }
 
+  const handleCompleteRound = (): void => {
+    console.log('setting active tab')
+    setActiveTab('standings')
+  }
+
   return (
     <>
       <div>
@@ -42,7 +47,11 @@ function TournamentPanel(): JSX.Element {
         </TabsContent>
         <TabsContent value="pairing">
           <h1>Round # Pairing</h1>
-          <PairingView tourneyName={tourneyName} pairings={currentPairings}></PairingView>
+          <PairingView
+            tourneyName={tourneyName}
+            pairings={currentPairings}
+            onCompleteRound={() => handleCompleteRound()}
+          ></PairingView>
         </TabsContent>
       </Tabs>
     </>
