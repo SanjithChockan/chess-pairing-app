@@ -31,11 +31,16 @@ export default function PairingView({
   // else gray out
 
   const [rowData, setRowData] = useState(pairings)
+  const [roundInProgress, setRoundInProgress] = useState(false)
 
   useEffect(() => {
     const f = async (): Promise<void> => {
       const names = await window.api.getPairings(tourneyName)
       setRowData(names)
+
+      const isRoundInProgress = await window.api.getRoundInProgress(tourneyName)
+      console.log(`isRoundInProgress: ${isRoundInProgress}`)
+      setRoundInProgress(isRoundInProgress)
     }
     f()
   }, [])
@@ -78,21 +83,30 @@ export default function PairingView({
 
     await window.api.completeRound(tourneyName)
     onCompleteRound()
-    // set roundInProgress back to 0
+
   }
 
   return (
-    <div className="w-full h-[600px] ag-theme-alpine">
-      <AgGridReact
-        columnDefs={columnDefs}
-        rowData={rowData}
-        onCellValueChanged={onCellValueChanged}
-        immutableData={true}
-        getRowId={(params) => params.data.match.toString()}
-      />
-      <Button onClick={handleComplete} className="mt-4">
-        Complete Round
-      </Button>
-    </div>
+    <>
+      <div className="w-full h-[600px] ag-theme-alpine">
+        <AgGridReact
+          columnDefs={columnDefs}
+          rowData={rowData}
+          onCellValueChanged={onCellValueChanged}
+          immutableData={true}
+          getRowId={(params) => params.data.match.toString()}
+        />
+      </div>
+      <div className="flex items-center gap-2">
+        <Button
+          onClick={handleComplete}
+          variant="outline"
+          className={`bg-green-500 hover:bg-green-600 text-white border-green-500 hover:border-green-600 ${!roundInProgress ? 'opacity-50 cursor-not-allowed' : ''}`}
+          disabled={!roundInProgress}
+        >
+          Complete Round
+        </Button>
+      </div>
+    </>
   )
 }

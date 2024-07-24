@@ -150,6 +150,8 @@ export default class Manager {
     const query = `SELECT name FROM sqlite_master WHERE type='table' AND lower(name)=lower(?)`
     const result = this.db.prepare(query).get(`${tournamentName}_round_${currentRound}`)
     if (result === undefined) {
+      // display message to user saying round has been generated
+      // display previous rounds in a non editable way
       return []
     }
 
@@ -197,11 +199,18 @@ export default class Manager {
       }
     })
 
-    // * CHANGE is round in progress to false
+    // * CHANGE is round in progress back to 0
+    const setRoundInProgressQuery = `UPDATE TourneyList SET roundInProgress=? WHERE name=?`
+    this.db.prepare(setRoundInProgressQuery).run(0, tournamentName)
+    console.log(`reset ${tournamentName}'s roundInProgress to 0`)
 
     // update round if not final round
-
     // if final - complete tournament (display final standings)
+    // update roundsComplete in TourneyList
+    const incrementRoundsCompleteQuery = `UPDATE TourneyList SET roundsComplete = roundsComplete + 1 WHERE name=?`
+    this.db.prepare(incrementRoundsCompleteQuery).run(tournamentName)
+    console.log(`reset ${tournamentName}'s roundInProgress to 0`)
+
     return
   }
 }
