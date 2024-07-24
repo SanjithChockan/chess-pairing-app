@@ -40,8 +40,6 @@ export default function CurrentStandings({
   }, [])
 
   const navigate = useNavigate()
-  // gray out button if roundInProgress = 1
-
   const generatePairings = useCallback(async () => {
     // getting pairing data to display... pass to onGeneratePairings to display on pairing tab
     await window.api.generatePairings(tourneyName)

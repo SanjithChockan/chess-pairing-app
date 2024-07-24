@@ -178,7 +178,6 @@ export default class Manager {
         player2: pair.player2
       })
     )
-
     return matches
   }
 
