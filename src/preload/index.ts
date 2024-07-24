@@ -12,7 +12,7 @@ export type ContextBridgeApi = {
   checkStandingsExist: (tournamentName) => Promise<boolean>
   getCurrentStandings: (tournamentName) => Promise<object[]>
   generatePairings: (tournamentName) => void
-  updateMatchResult: (tournamentName, match_id, result) => void
+  updateMatchResult: (tournamentName, match_id, result) => Promise<void>
   getPairings: (tournamentName) => Promise<object[]>
   getRoundInProgress: (tournamentName) => Promise<boolean>
   completeRound: (tournamentName) => Promise<void>
@@ -46,8 +46,10 @@ const api: ContextBridgeApi = {
     const result = await ipcRenderer.invoke('generatePairings', tournamentName)
     return result
   },
-  updateMatchResult: (tournamentName, match_id, result) =>
-    ipcRenderer.send('updateMatchResult', { tournamentName, match_id, result }),
+  updateMatchResult: async (tournamentName, match_id, result) => {
+    await ipcRenderer.invoke('updateMatchResult', { tournamentName, match_id, result })
+    return
+  },
 
   getPairings: async (tournamentName) => {
     const result = await ipcRenderer.invoke('getPairings', tournamentName)

@@ -63,7 +63,7 @@ app.whenReady().then(() => {
     managerObj.deletePlayer(data.playerInfo, data.tournamentName)
   })
 
-  ipcMain.on('updateMatchResult', (_event, data) => {
+  ipcMain.handle('updateMatchResult', async (_event, data) => {
     managerObj.updateResult(data.tournamentName, data.match_id, data.result)
   })
 

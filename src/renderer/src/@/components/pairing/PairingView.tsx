@@ -59,22 +59,24 @@ export default function PairingView({
     []
   )
 
-  const onCellValueChanged = (params: any) => {
+  const onCellValueChanged = async (params: any): Promise<void> => {
     if (params.column.colId === 'result') {
       const updatedPairings = rowData.map((p) =>
         p.match === params.data.match ? { ...p, result: params.newValue } : p
       )
       setRowData(updatedPairings)
       // update result value in backend
-      window.api.updateMatchResult(tourneyName, params.data.match, params.newValue)
+      await window.api.updateMatchResult(tourneyName, params.data.match, params.newValue)
     }
   }
 
   const handleComplete = async (): Promise<void> => {
-    // Sending back results to backend for processing
-    console.log('Completed round. Update standings')
+    // Invoke backend to compute results
+    // For future - add check to ensure all results are in
+    // return false if not and notify user to input all results before completing
+    // or gray out until all results are in - get value each time user enters a result
+
     await window.api.completeRound(tourneyName)
-    console.log('sent to backend')
     onCompleteRound()
     // set roundInProgress back to 0
   }

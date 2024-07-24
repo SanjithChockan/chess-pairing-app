@@ -148,7 +148,7 @@ export default class Manager {
 
     // check if current round has been generated; return empty list other wise
     const query = `SELECT name FROM sqlite_master WHERE type='table' AND lower(name)=lower(?)`
-    const result = this.db.prepare(query).get(`${tournamentName}_round_${tournamentName}`)
+    const result = this.db.prepare(query).get(`${tournamentName}_round_${currentRound}`)
     if (result === undefined) {
       return []
     }
@@ -181,11 +181,11 @@ export default class Manager {
 
     // get results from current_round and update score for standings
     const matches = this.getPairings(tournamentName)
-    const drawQuery = `UPDATE ${tournamentName}_standings SET score = score + ${0.5} WHERE firstname=? AND lastname=?`
-    const winQuery = `UPDATE ${tournamentName}_standings SET score = score + ${1} WHERE firstname=? AND lastname=?`
+    const drawQuery = `UPDATE ${tournamentName}_standings SET score = score + 0.5 WHERE firstname=? AND lastname=?`
+    const winQuery = `UPDATE ${tournamentName}_standings SET score = score + 1 WHERE firstname=? AND lastname=?`
     matches.map((pair) => {
-      const [p1_firstname, p1_lastname] = pair.player1
-      const [p2_firstname, p2_lastname] = pair.player2
+      const [p1_firstname, p1_lastname] = pair.player1.split(' ')
+      const [p2_firstname, p2_lastname] = pair.player2.split(' ')
 
       if (pair.result == '1/2-1/2') {
         this.db.prepare(drawQuery).run(p1_firstname, p1_lastname)
