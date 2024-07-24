@@ -82,6 +82,7 @@ export default class Manager {
   }
 
   getCurrentStandings(tournamentName: string): object[] {
+    console.log(`getting current standings for ${tournamentName}`)
     const sql = `SELECT * FROM ${tournamentName}_standings`
     const playerStandings = this.db.prepare(sql).all()
     return playerStandings
@@ -96,6 +97,8 @@ export default class Manager {
   checkRoundInProgress(tournamentName: string): boolean {
     const query = `SELECT name FROM TourneyList WHERE name=? AND roundInProgress=?`
     const result = this.db.prepare(query).get(tournamentName, 1)
+    console.log(`checking if round is in progress for ${tournamentName}`)
+    console.log(result)
     return result !== undefined
   }
 

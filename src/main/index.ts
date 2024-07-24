@@ -72,8 +72,8 @@ app.whenReady().then(() => {
     return doesExist
   })
 
-  ipcMain.handle('getRoundInProgress', async (_event, data) => {
-    const inProgress = managerObj.checkRoundInProgress(data.tournamentName)
+  ipcMain.handle('getRoundInProgress', async (_event, tournamentName) => {
+    const inProgress = managerObj.checkRoundInProgress(tournamentName)
     return inProgress
   })
 
