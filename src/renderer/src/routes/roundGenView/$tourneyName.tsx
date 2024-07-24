@@ -46,7 +46,6 @@ function TournamentPanel(): JSX.Element {
           ></CurrentStandings>
         </TabsContent>
         <TabsContent value="pairing">
-          <h1>Round # Pairing</h1>
           <PairingView
             tourneyName={tourneyName}
             pairings={currentPairings}

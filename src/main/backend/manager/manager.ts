@@ -96,7 +96,6 @@ export default class Manager {
   checkRoundInProgress(tournamentName: string): boolean {
     const query = `SELECT name FROM TourneyList WHERE name=? AND roundInProgress=?`
     const result = this.db.prepare(query).get(tournamentName, 1)
-    console.log(`roundInProgress value: ${result}`)
     return result !== undefined
   }
 
@@ -107,11 +106,24 @@ export default class Manager {
     return roundNumObj.roundsComplete + 1
   }
 
+  getRoundsCompleted(tournamentName: string): number {
+    // retrive from tourneylist table
+    const currentRoundQuery = 'SELECT roundsComplete FROM TourneyList WHERE name = ?'
+    const roundNumObj = this.db.prepare(currentRoundQuery).get(tournamentName)
+    return roundNumObj.roundsComplete
+  }
+
+  getTotalRounds(tournamentName: string): number {
+    // retrive from tourneylist table
+    const currentRoundQuery = 'SELECT totalRounds FROM TourneyList WHERE name = ?'
+    const roundNumObj = this.db.prepare(currentRoundQuery).get(tournamentName)
+    return roundNumObj.totalRounds
+  }
+
   generatePairings(tournamentName: string): void {
     // set roundInProgress for tournamentName to 1
     const setRoundInProgressQuery = `UPDATE TourneyList SET roundInProgress=? WHERE name=?`
     this.db.prepare(setRoundInProgressQuery).run(1, tournamentName)
-    console.log(`set ${tournamentName}'s roundInProgress to 1`)
 
     const sql = `SELECT * FROM ${tournamentName}_standings`
     const playerStandings = this.db.prepare(sql).all()
@@ -178,10 +190,20 @@ export default class Manager {
     return
   }
 
-  completeRound(tournamentName): void {
-    console.log(`Completing round for ${tournamentName}`)
+  tournamentComplete(tournamentName): boolean {
+    // if final round is complete - complete tournament (display final standings)
+    const roundsCompleted = this.getRoundsCompleted(tournamentName)
+    const totalRounds = this.getTotalRounds(tournamentName)
 
-    // get results from current_round and update score for standings
+    if (roundsCompleted === totalRounds) {
+      return true
+    }
+
+    return false
+  }
+
+  completeRound(tournamentName): void {
+    // get results from current_round table and update score for standings
     const matches = this.getPairings(tournamentName)
     const drawQuery = `UPDATE ${tournamentName}_standings SET score = score + 0.5 WHERE firstname=? AND lastname=?`
     const winQuery = `UPDATE ${tournamentName}_standings SET score = score + 1 WHERE firstname=? AND lastname=?`
@@ -202,15 +224,15 @@ export default class Manager {
     // * CHANGE is round in progress back to 0
     const setRoundInProgressQuery = `UPDATE TourneyList SET roundInProgress=? WHERE name=?`
     this.db.prepare(setRoundInProgressQuery).run(0, tournamentName)
-    console.log(`reset ${tournamentName}'s roundInProgress to 0`)
 
-    // update round if not final round
-    // if final - complete tournament (display final standings)
+    // update round - can update without checking final round as a tournament can have at least one round
     // update roundsComplete in TourneyList
     const incrementRoundsCompleteQuery = `UPDATE TourneyList SET roundsComplete = roundsComplete + 1 WHERE name=?`
     this.db.prepare(incrementRoundsCompleteQuery).run(tournamentName)
-    console.log(`reset ${tournamentName}'s roundInProgress to 0`)
 
+    if (this.tournamentComplete(tournamentName)) {
+      console.log('Tournament is complete')
+    }
     return
   }
 }

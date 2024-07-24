@@ -88,7 +88,7 @@ export default function PairingView({
 
   return (
     <>
-      <div className="w-full h-[600px] ag-theme-alpine">
+      <div className="ag-theme-quartz w-full" style={{ height: 500 }}>
         <AgGridReact
           columnDefs={columnDefs}
           rowData={rowData}
