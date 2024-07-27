@@ -12,6 +12,7 @@ type swissPlayerObject = {
   score: number
   rating: number
   receivedBye: boolean
+  colors?: boolean | Array<string>
 }
 
 export default class Manager {
@@ -68,7 +69,7 @@ export default class Manager {
 
   createStandings(tournamentName: string): void {
     // create standings table
-    const query = `CREATE TABLE IF NOT EXISTS ${tournamentName}_standings(firstname TEXT NOT NULL, lastname TEXT NOT NULL, rating INT, score FLOAT, receivedBye INT NOT NULL)`
+    const query = `CREATE TABLE IF NOT EXISTS ${tournamentName}_standings(firstname TEXT NOT NULL, lastname TEXT NOT NULL, rating INT, score FLOAT, receivedBye INT NOT NULL, colors TEXT NOT NULL)`
     this.db.exec(query)
 
     // fill table with players and score of zero
@@ -77,8 +78,8 @@ export default class Manager {
 
     players.forEach((player: playerObject) => {
       const { firstname, lastname, rating } = player
-      const fill_query = `INSERT INTO ${tournamentName}_standings (firstname, lastname, rating, score, receivedBye) VALUES (?, ?, ?, ?, ?)`
-      this.db.prepare(fill_query).run(firstname, lastname, rating, 0, 0)
+      const fill_query = `INSERT INTO ${tournamentName}_standings (firstname, lastname, rating, score, receivedBye, colors) VALUES (?, ?, ?, ?, ?, ?)`
+      this.db.prepare(fill_query).run(firstname, lastname, rating, 0, 0, '')
     })
   }
 
@@ -128,6 +129,7 @@ export default class Manager {
 
     const sql = `SELECT * FROM ${tournamentName}_standings`
     const playerStandings = this.db.prepare(sql).all()
+
     // call tournament-pairing api to generate pairings
     const playerObjects: swissPlayerObject[] = []
 
@@ -136,7 +138,8 @@ export default class Manager {
         id: `${player.firstname} ${player.lastname}`,
         score: player.score,
         rating: player.rating,
-        receivedBye: player.receivedBye === 1 ? true : false
+        receivedBye: player.receivedBye === 1 ? true : false,
+        colors: player.colors === '' ? false : player.colors.split('')
       })
     })
 
@@ -211,11 +214,19 @@ export default class Manager {
     const matches = this.getPairings(tournamentName)
     const drawQuery = `UPDATE ${tournamentName}_standings SET score = score + 0.5 WHERE firstname=? AND lastname=?`
     const winQuery = `UPDATE ${tournamentName}_standings SET score = score + 1 WHERE firstname=? AND lastname=?`
+    const colorQuery = `UPDATE ${tournamentName}_standings SET colors = colors || ? WHERE firstname=? AND lastname=?`
     matches.map((pair) => {
       const [p1_firstname, p1_lastname] = pair.player1.split(' ')
       const [p2_firstname, p2_lastname] = pair.player2.split(' ')
 
+      // update colors
+      this.db.prepare(colorQuery).run('w', p1_firstname, p1_lastname)
+      if (p2_firstname !== 'BYE') {
+        this.db.prepare(colorQuery).run('b', p2_firstname, p2_lastname)
+      }
+
       if (pair.result == '1/2-1/2') {
+        // update score
         this.db.prepare(drawQuery).run(p1_firstname, p1_lastname)
         this.db.prepare(drawQuery).run(p2_firstname, p2_lastname)
       } else if (pair.result == '1-0') {
