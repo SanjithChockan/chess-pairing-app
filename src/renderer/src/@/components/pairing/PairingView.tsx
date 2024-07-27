@@ -57,7 +57,7 @@ export default function PairingView({
         cellEditorParams: {
           values: resultOptions.map((option) => option.value)
         },
-        editable: true
+        editable: (params) => params.data.player2 !== 'BYE',
       },
       { headerName: 'Player 2', field: 'player2', width: 150 }
     ],
