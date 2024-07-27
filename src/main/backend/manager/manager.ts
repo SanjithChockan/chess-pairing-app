@@ -11,6 +11,7 @@ type swissPlayerObject = {
   id: string
   score: number
   rating: number
+  receivedBye: boolean
 }
 
 export default class Manager {
@@ -67,7 +68,7 @@ export default class Manager {
 
   createStandings(tournamentName: string): void {
     // create standings table
-    const query = `CREATE TABLE IF NOT EXISTS ${tournamentName}_standings(firstname TEXT NOT NULL, lastname TEXT NOT NULL, rating INT, score FLOAT)`
+    const query = `CREATE TABLE IF NOT EXISTS ${tournamentName}_standings(firstname TEXT NOT NULL, lastname TEXT NOT NULL, rating INT, score FLOAT, receivedBye INT NOT NULL)`
     this.db.exec(query)
 
     // fill table with players and score of zero
@@ -76,8 +77,8 @@ export default class Manager {
 
     players.forEach((player: playerObject) => {
       const { firstname, lastname, rating } = player
-      const fill_query = `INSERT INTO ${tournamentName}_standings (firstname, lastname, rating, score) VALUES (?, ?, ?, ?)`
-      this.db.prepare(fill_query).run(firstname, lastname, rating, 0)
+      const fill_query = `INSERT INTO ${tournamentName}_standings (firstname, lastname, rating, score, receivedBye) VALUES (?, ?, ?, ?, ?)`
+      this.db.prepare(fill_query).run(firstname, lastname, rating, 0, 0)
     })
   }
 
@@ -134,7 +135,8 @@ export default class Manager {
       playerObjects.push({
         id: `${player.firstname} ${player.lastname}`,
         score: player.score,
-        rating: player.rating
+        rating: player.rating,
+        receivedBye: player.receivedBye === 1 ? true : false
       })
     })
 
@@ -151,7 +153,7 @@ export default class Manager {
       const { match, player1, player2 } = matchPair
       const fill_query = `INSERT INTO ${tournamentName}_round_${currentRound} (match_id, player1, result, player2) VALUES (?, ?, ?, ?)`
       if (player2 === null) {
-        this.db.prepare(fill_query).run(match, player1, 'x-x', 'BYE')
+        this.db.prepare(fill_query).run(match, player1, '1-0', 'BYE')
       } else {
         this.db.prepare(fill_query).run(match, player1, 'x-x', player2)
       }
@@ -220,6 +222,10 @@ export default class Manager {
         this.db.prepare(winQuery).run(p1_firstname, p1_lastname)
       } else if (pair.result == '0-1') {
         this.db.prepare(winQuery).run(p2_firstname, p2_lastname)
+      } else if (pair.result == 'x-x' && p2_firstname === 'BYE') {
+        this.db.prepare(winQuery).run(p1_firstname, p1_lastname)
+        const updateByeQuery = `UPDATE ${tournamentName}_standings SET receivedBye = 1 WHERE firstname=? AND lastname=?`
+        this.db.prepare(updateByeQuery).run(p1_firstname, p1_lastname)
       }
     })
 
