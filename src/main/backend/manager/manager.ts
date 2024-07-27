@@ -150,7 +150,11 @@ export default class Manager {
     matches.forEach((matchPair) => {
       const { match, player1, player2 } = matchPair
       const fill_query = `INSERT INTO ${tournamentName}_round_${currentRound} (match_id, player1, result, player2) VALUES (?, ?, ?, ?)`
-      this.db.prepare(fill_query).run(match, player1, 'x-x', player2)
+      if (player2 === null) {
+        this.db.prepare(fill_query).run(match, player1, 'x-x', 'BYE')
+      } else {
+        this.db.prepare(fill_query).run(match, player1, 'x-x', player2)
+      }
     })
     return
   }
@@ -197,7 +201,6 @@ export default class Manager {
     if (roundsCompleted === totalRounds) {
       return true
     }
-
     return false
   }
 
