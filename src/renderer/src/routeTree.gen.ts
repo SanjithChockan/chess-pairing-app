@@ -16,6 +16,7 @@ import { Route as GenerateRoundsImport } from './routes/generateRounds'
 import { Route as EditTournamentImport } from './routes/editTournament'
 import { Route as CreateTournamentImport } from './routes/createTournament'
 import { Route as IndexImport } from './routes/index'
+import { Route as TournamentCompleteViewTourneyNameImport } from './routes/tournamentCompleteView/$tourneyName'
 import { Route as StandingsTourneyNameImport } from './routes/standings/$tourneyName'
 import { Route as RoundGenViewTourneyNameImport } from './routes/roundGenView/$tourneyName'
 
@@ -45,6 +46,12 @@ const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any)
+
+const TournamentCompleteViewTourneyNameRoute =
+  TournamentCompleteViewTourneyNameImport.update({
+    path: '/tournamentCompleteView/$tourneyName',
+    getParentRoute: () => rootRoute,
+  } as any)
 
 const StandingsTourneyNameRoute = StandingsTourneyNameImport.update({
   path: '/standings/$tourneyName',
@@ -109,6 +116,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StandingsTourneyNameImport
       parentRoute: typeof rootRoute
     }
+    '/tournamentCompleteView/$tourneyName': {
+      id: '/tournamentCompleteView/$tourneyName'
+      path: '/tournamentCompleteView/$tourneyName'
+      fullPath: '/tournamentCompleteView/$tourneyName'
+      preLoaderRoute: typeof TournamentCompleteViewTourneyNameImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -122,6 +136,7 @@ export const routeTree = rootRoute.addChildren({
   LoadTournamentRoute,
   RoundGenViewTourneyNameRoute,
   StandingsTourneyNameRoute,
+  TournamentCompleteViewTourneyNameRoute,
 })
 
 /* prettier-ignore-end */

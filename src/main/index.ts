@@ -153,6 +153,10 @@ app.whenReady().then(() => {
     return playerNames
   })
 
+  ipcMain.handle('isTournamentComplete', (_event, tournamentName) => {
+    return managerObj.tournamentComplete(tournamentName)
+  })
+
   createWindow()
 
   app.on('activate', function () {

@@ -3,6 +3,7 @@ import { AgGridReact } from 'ag-grid-react'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import { Button } from '@renderer/@/components/ui/button'
+import { useNavigate } from '@tanstack/react-router'
 
 interface Pairing {
   match: number
@@ -32,6 +33,7 @@ export default function PairingView({
 
   const [rowData, setRowData] = useState(pairings)
   const [roundInProgress, setRoundInProgress] = useState(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const f = async (): Promise<void> => {
@@ -57,7 +59,7 @@ export default function PairingView({
         cellEditorParams: {
           values: resultOptions.map((option) => option.value)
         },
-        editable: (params) => params.data.player2 !== 'BYE',
+        editable: (params) => params.data.player2 !== 'BYE'
       },
       { headerName: 'Player 2', field: 'player2', width: 150 }
     ],
@@ -82,7 +84,15 @@ export default function PairingView({
     // or gray out until all results are in - get value each time user enters a result
     await window.api.completeRound(tourneyName)
     // if tournament complete (check value in backend (invoke tournamentComplete function) - reroute to final page or just execute onCompleteRound())
-    onCompleteRound()
+    const isTourneyComplete = await window.api.checkTournamentComplete(tourneyName)
+    if (isTourneyComplete) {
+      navigate({
+        to: '/tournamentCompleteView/$tourneyName',
+        params: { tourneyName }
+      })
+    } else {
+      onCompleteRound()
+    }
   }
 
   return (

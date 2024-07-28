@@ -16,6 +16,7 @@ export type ContextBridgeApi = {
   getPairings: (tournamentName) => Promise<object[]>
   getRoundInProgress: (tournamentName) => Promise<boolean>
   completeRound: (tournamentName) => Promise<void>
+  checkTournamentComplete: (tournamentName) => Promise<boolean>
 }
 
 // Custom APIs for renderer
@@ -62,6 +63,10 @@ const api: ContextBridgeApi = {
   completeRound: async (tournamentName) => {
     await ipcRenderer.invoke('completeRound', tournamentName)
     return
+  },
+  checkTournamentComplete: async (tournamentName) => {
+    const result = await ipcRenderer.invoke('isTournamentComplete', tournamentName)
+    return result
   }
 }
 
