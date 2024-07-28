@@ -37,6 +37,7 @@ export default function CardTournamentForm(): JSX.Element {
     if (tourneyName !== 'None') {
       const standingsExist = await window.api.checkStandingsExist(tourneyName)
       console.log(`standingsExist: ${standingsExist} for ${tourneyName}`)
+      // TODO: check if tournament is complete and reroute appropriately
       if (standingsExist) {
         navigate({
           to: '/roundGenView/$tourneyName',

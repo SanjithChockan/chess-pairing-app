@@ -81,6 +81,7 @@ export default function PairingView({
     // return false if not and notify user to input all results before completing
     // or gray out until all results are in - get value each time user enters a result
     await window.api.completeRound(tourneyName)
+    // if tournament complete (check value in backend (invoke tournamentComplete function) - reroute to final page or just execute onCompleteRound())
     onCompleteRound()
   }
 
