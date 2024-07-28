@@ -45,14 +45,12 @@ export default function CardTournamentForm(): JSX.Element {
             to: '/tournamentCompleteView/$tourneyName',
             params: { tourneyName }
           })
-        }
-        else {
+        } else {
           navigate({
             to: '/roundGenView/$tourneyName',
             params: { tourneyName }
           })
         }
-        
       } else {
         navigate({ to: '/editTournament', search: { tourneyName } })
       }

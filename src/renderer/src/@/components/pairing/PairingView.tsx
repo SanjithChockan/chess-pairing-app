@@ -5,12 +5,6 @@ import 'ag-grid-community/styles/ag-theme-alpine.css'
 import { Button } from '@renderer/@/components/ui/button'
 import { useNavigate } from '@tanstack/react-router'
 
-interface Pairing {
-  match: number
-  player1: string
-  player2: string
-  result?: string
-}
 type propType = {
   tourneyName: string
   pairings: object[]
