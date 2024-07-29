@@ -10,7 +10,7 @@ function finalView(): JSX.Element {
   return (
     <>
       <div>
-        <h1>{tourneyName} completeTournamentView Page </h1>
+        <h1>{tourneyName} Final Standings </h1>
       </div>
     </>
   )
