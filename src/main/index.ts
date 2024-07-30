@@ -81,6 +81,10 @@ app.whenReady().then(() => {
     managerObj.createStandings(data.tournamentName)
   })
 
+  ipcMain.handle('checkAllResultsFilled', async (_event, tournamentName) => {
+    return managerObj.allResultsFilled(tournamentName)
+  })
+
   ipcMain.on('sendTest', (_event, value) => {
     console.log('Printing from main process')
     console.log(value)

@@ -209,6 +209,20 @@ export default class Manager {
     return false
   }
 
+  allResultsFilled(tournamentName): boolean {
+    const currentRound = this.getCurrentRound(tournamentName)
+    const sql = `SELECT result FROM ${tournamentName}_round_${currentRound}`
+    const results = this.db.prepare(sql).all()
+
+    for (const result of results) {
+      const resultStr = result.result
+      if (resultStr === 'x-x') {
+        return false
+      }
+    }
+    return true
+  }
+
   completeRound(tournamentName): void {
     // get results from current_round table and update score for standings
     const matches = this.getPairings(tournamentName)

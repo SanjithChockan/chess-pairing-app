@@ -23,7 +23,6 @@ function TournamentPanel(): JSX.Element {
   }
 
   const handleCompleteRound = (): void => {
-    console.log('setting active tab')
     setActiveTab('standings')
   }
 
