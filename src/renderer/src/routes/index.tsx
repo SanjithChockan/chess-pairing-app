@@ -12,7 +12,7 @@ function Index(): JSX.Element {
       <div className="flex items-center justify-center h-screen">
         <div className="flex flex-col space-y-4 w-64">
           <div className="space-y-1">
-            <h4 className="text-sm font-medium leading-none">Chess Pairer</h4>
+            <h4 className="text-sm font-medium leading-none">Chess Verse</h4>
             <p className="text-sm text-muted-foreground">Free chess swiss pairing software.</p>
           </div>
           <Separator className="my-4" />
