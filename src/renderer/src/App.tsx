@@ -18,7 +18,6 @@ function App(): JSX.Element {
     <>
       <Toaster></Toaster>
       <RouterProvider router={router} />
-      
     </>
   )
 }
