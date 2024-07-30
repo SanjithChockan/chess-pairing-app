@@ -63,18 +63,18 @@ export default function PlayerGrid({ tourneyName }: propType): JSX.Element {
 
   const onRemoveSelected = useCallback(() => {
     const selectedData = gridRef.current!.api.getSelectedRows()
-    console.log(`selectedData: ${JSON.stringify(selectedData)}`)
-    window.api.deletePlayer(tourneyName, selectedData)
-    gridRef.current!.api.applyTransaction({
-      remove: selectedData
-    })!
-    const removeName = `${selectedData[0].firstName} ${selectedData[0].lastName}`
-    const data = rowData.filter((item) => {
-      const playerName = `${item.firstName} ${item.lastName}`
-      return playerName !== removeName
-    })
-    console.log(`data: ${data}`)
-    setRowData(data)
+    if (selectedData.length == 1) {
+      window.api.deletePlayer(tourneyName, selectedData)
+      gridRef.current!.api.applyTransaction({
+        remove: selectedData
+      })!
+      const removeName = `${selectedData[0].firstName} ${selectedData[0].lastName}`
+      const data = rowData.filter((item) => {
+        const playerName = `${item.firstName} ${item.lastName}`
+        return playerName !== removeName
+      })
+      setRowData(data)
+    }
   }, [rowData])
 
   return (
@@ -122,8 +122,9 @@ export default function PlayerGrid({ tourneyName }: propType): JSX.Element {
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
-            className="bg-green-500 hover:bg-green-600 text-white border-green-500 hover:border-green-600"
+            className={`bg-green-500 hover:bg-green-600 text-white border-green-500 hover:border-green-600 ${rowData.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
             onClick={completeRegistration}
+            disabled={rowData.length === 0}
           >
             Complete Registration
           </Button>
