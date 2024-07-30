@@ -4,6 +4,7 @@ import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import { Button } from '@renderer/@/components/ui/button'
 import { useNavigate } from '@tanstack/react-router'
+import { useToast } from '@renderer/@/components/ui/use-toast'
 
 type propType = {
   tourneyName: string
@@ -21,9 +22,7 @@ export default function PairingView({
   pairings,
   onCompleteRound
 }: propType): JSX.Element {
-  // TODO: If clicked on pairing tab than generate from standings, check whether the table tourneyName_round_current exists -> display matches
-  // If roundInProgress=1, don't gray out 'Complete' button
-  // else gray out
+  const { toast } = useToast()
 
   const [rowData, setRowData] = useState(pairings)
   const [roundInProgress, setRoundInProgress] = useState(false)
@@ -77,17 +76,27 @@ export default function PairingView({
     // return false if not and notify user to input all results before completing
     // or gray out until all results are in - get value each time user enters a result
 
-    
-    await window.api.completeRound(tourneyName)
-    // if tournament complete (check value in backend (invoke tournamentComplete function) - reroute to final page or just execute onCompleteRound())
-    const isTourneyComplete = await window.api.checkTournamentComplete(tourneyName)
-    if (isTourneyComplete) {
-      navigate({
-        to: '/tournamentCompleteView/$tourneyName',
-        params: { tourneyName }
+    const areResultsFilled = await window.api.checkAllResultsFilled(tourneyName)
+    if (!areResultsFilled) {
+      // pop a message to user to fill up all values
+      console.log('before toast')
+      toast({
+        title: 'Uh oh! Something went wrong.',
+        description: 'enter all results before completing round!'
       })
+      console.log('after toast')
     } else {
-      onCompleteRound()
+      await window.api.completeRound(tourneyName)
+      // if tournament complete (check value in backend (invoke tournamentComplete function) - reroute to final page or just execute onCompleteRound())
+      const isTourneyComplete = await window.api.checkTournamentComplete(tourneyName)
+      if (isTourneyComplete) {
+        navigate({
+          to: '/tournamentCompleteView/$tourneyName',
+          params: { tourneyName }
+        })
+      } else {
+        onCompleteRound()
+      }
     }
   }
 

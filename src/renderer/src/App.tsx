@@ -1,5 +1,5 @@
 import { RouterProvider, createRouter } from '@tanstack/react-router'
-
+import { Toaster } from '@renderer/@/components/ui/toaster'
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'
 
@@ -16,7 +16,9 @@ declare module '@tanstack/react-router' {
 function App(): JSX.Element {
   return (
     <>
+      <Toaster></Toaster>
       <RouterProvider router={router} />
+      
     </>
   )
 }

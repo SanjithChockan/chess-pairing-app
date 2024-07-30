@@ -210,6 +210,7 @@ export default class Manager {
   }
 
   allResultsFilled(tournamentName): boolean {
+    console.log(`checking if ${tournamentName}'s results are all in. `)
     const currentRound = this.getCurrentRound(tournamentName)
     const sql = `SELECT result FROM ${tournamentName}_round_${currentRound}`
     const results = this.db.prepare(sql).all()
@@ -217,9 +218,11 @@ export default class Manager {
     for (const result of results) {
       const resultStr = result.result
       if (resultStr === 'x-x') {
+        console.log(`There are empty results. ${resultStr}`)
         return false
       }
     }
+    console.log(`all results are filled in`)
     return true
   }
 
