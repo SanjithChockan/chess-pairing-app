@@ -8,11 +8,11 @@ export const Route = createFileRoute('/createTournament')({
 function createTournament(): JSX.Element {
   return (
     <>
-      <div>
-        <h1>Create Tournament Page</h1>
+      <div className="w-full">
+        <div className="h-screen flex items-center justify-center">
+          <TournamentForm />
+        </div>
       </div>
-
-      <TournamentForm />
     </>
   )
 }

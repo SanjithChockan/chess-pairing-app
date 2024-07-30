@@ -16,8 +16,13 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
+  SelectValue,
+  SelectGroup,
+  SelectLabel
 } from '@renderer/@/components/ui/select'
+
+import { ScrollArea } from "@renderer/@/components/ui/scroll-area"
+
 
 export default function CardTournamentForm(): JSX.Element {
   const [tourneyList, setTourneyState] = useState(['default'])
@@ -61,23 +66,25 @@ export default function CardTournamentForm(): JSX.Element {
     <Card className="w-[350px]">
       <CardHeader>
         <CardTitle>Tournaments</CardTitle>
-        <CardDescription>Select tournament to edit.</CardDescription>
+        <CardDescription>Select a tournament to view or edit.</CardDescription>
       </CardHeader>
       <CardContent>
         <form>
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="tournament">Tournament</Label>
+              <Label htmlFor="tournament">Your tournaments</Label>
               <Select onValueChange={setTourneyName}>
                 <SelectTrigger id="tournament">
                   <SelectValue placeholder="Select" />
                 </SelectTrigger>
                 <SelectContent position="popper">
-                  {tourneyList.map((option) => (
-                    <SelectItem key={option.toLowerCase()} value={option}>
-                      {option}
-                    </SelectItem>
-                  ))}
+                  <ScrollArea className="h-[200px]">
+                    {tourneyList.map((option) => (
+                      <SelectItem key={option.toLowerCase()} value={option}>
+                        {option}
+                      </SelectItem>
+                    ))}
+                  </ScrollArea>
                 </SelectContent>
               </Select>
             </div>

@@ -84,8 +84,6 @@ export default function TournamentForm(): JSX.Element {
                   </FormControl>
                   <SelectContent>
                     <SelectItem value="Swiss">Swiss</SelectItem>
-                    <SelectItem value="Round-robin">Round-robin</SelectItem>
-                    <SelectItem value="Elimination">Elimination</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormDescription>Select tournament format.</FormDescription>
@@ -107,7 +105,9 @@ export default function TournamentForm(): JSX.Element {
               </FormItem>
             )}
           />
-          <Button type="submit">Create</Button>
+          <Button type="submit" className="w-full">
+            Create
+          </Button>
         </form>
       </Form>
     </CardWrapper>
