@@ -63,10 +63,18 @@ export default function PlayerGrid({ tourneyName }: propType): JSX.Element {
 
   const onRemoveSelected = useCallback(() => {
     const selectedData = gridRef.current!.api.getSelectedRows()
+    console.log(`selectedData: ${JSON.stringify(selectedData)}`)
     window.api.deletePlayer(tourneyName, selectedData)
     gridRef.current!.api.applyTransaction({
       remove: selectedData
     })!
+    const removeName = `${selectedData[0].firstName} ${selectedData[0].lastName}`
+    const data = rowData.filter((item) => {
+      const playerName = `${item.firstName} ${item.lastName}`
+      return playerName !== removeName
+    })
+    console.log(`data: ${data}`)
+    setRowData(data)
   }, [rowData])
 
   return (
@@ -123,12 +131,7 @@ export default function PlayerGrid({ tourneyName }: propType): JSX.Element {
       </div>
 
       <div className="ag-theme-quartz w-full" style={{ height: 500 }}>
-        <AgGridReact
-          ref={gridRef}
-          rowData={rowData}
-          columnDefs={colDefs}
-          rowSelection={'multiple'}
-        />
+        <AgGridReact ref={gridRef} rowData={rowData} columnDefs={colDefs} rowSelection={'single'} />
       </div>
       <div className="flex justify-end">
         <Link to="/">
