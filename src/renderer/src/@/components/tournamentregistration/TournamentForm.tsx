@@ -23,6 +23,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useNavigate } from '@tanstack/react-router'
+import { useToast } from '@renderer/@/components/ui/use-toast'
 
 const formSchema = z.object({
   tournamentName: z.string().trim().min(1, {
@@ -33,6 +34,7 @@ const formSchema = z.object({
 })
 
 export default function TournamentForm(): JSX.Element {
+  const { toast } = useToast()
   const navigate = useNavigate()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -43,13 +45,21 @@ export default function TournamentForm(): JSX.Element {
     }
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>): void {
-    // use ipc to send data to backend for processing
-    window.api.tournamentForm(values)
-    navigate({
-      to: '/editTournament',
-      search: { tourneyName: values.tournamentName }
-    })
+  async function onSubmit(values: z.infer<typeof formSchema>): Promise<void> {
+    const tourneyExists = await window.api.checkIfTournamentNameIsTaken(values.tournamentName)
+    if (tourneyExists) {
+      toast({
+        title: 'Uh oh! Something went wrong.',
+        description: 'Choose a different tournament name'
+      })
+    } else {
+      // use ipc to send data to backend for processing
+      window.api.tournamentForm(values)
+      navigate({
+        to: '/editTournament',
+        search: { tourneyName: values.tournamentName }
+      })
+    }
   }
 
   return (

@@ -77,7 +77,7 @@ export default function CardTournamentForm(): JSX.Element {
                 <SelectTrigger id="tournament">
                   <SelectValue placeholder="Select" />
                 </SelectTrigger>
-                <SelectContent position="popper">
+                <SelectContent position="popper" sideOffset={5}>
                   <ScrollArea className="h-[200px]">
                     {tourneyList.map((option) => (
                       <SelectItem key={option.toLowerCase()} value={option}>

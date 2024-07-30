@@ -85,6 +85,11 @@ app.whenReady().then(() => {
     return managerObj.allResultsFilled(tournamentName)
   })
 
+  ipcMain.handle('checkTournamentName', async (_event, tournamentName) => {
+    const inProgress = managerObj.tournamentNameExists(tournamentName)
+    return inProgress
+  })
+
   ipcMain.on('sendTest', (_event, value) => {
     console.log('Printing from main process')
     console.log(value)

@@ -27,8 +27,7 @@ export default class Manager {
   }
 
   createTournament(name: string, roundNums: number): void {
-    const createTourneyListQuery = `CREATE TABLE IF NOT EXISTS TourneyList(name TEXT NOT NULL, totalRounds INT NOT NULL, roundsComplete INT NOT NULL, roundInProgress INT NOT NULL)`
-    this.db.exec(createTourneyListQuery)
+    this.createTourneyListTable()
 
     // add tournament to tourney list
     const insertTourneyQuery =
@@ -40,13 +39,25 @@ export default class Manager {
     this.db.exec(createPlayersTableQuery)
   }
 
-  loadTournaments(): object[] {
+  createTourneyListTable(): void {
     const createTourneyListQuery = `CREATE TABLE IF NOT EXISTS TourneyList(name TEXT NOT NULL, totalRounds INT NOT NULL, roundsComplete INT NOT NULL, roundInProgress INT NOT NULL)`
     this.db.exec(createTourneyListQuery)
+  }
+
+  loadTournaments(): object[] {
+    this.createTourneyListTable()
     // fetch rows from table and return it as list of string
     const sql = `SELECT * FROM TourneyList`
     const names = this.db.prepare(sql).all()
     return names
+  }
+
+  tournamentNameExists(tournamentName): boolean {
+    this.createTourneyListTable()
+
+    const query = `SELECT name FROM TourneyList WHERE name=?`
+    const result = this.db.prepare(query).get(tournamentName)
+    return result !== undefined
   }
 
   getPlayers(tournamentName: string): object[] {
