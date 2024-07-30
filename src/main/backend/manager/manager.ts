@@ -12,7 +12,7 @@ type swissPlayerObject = {
   score: number
   rating: number
   receivedBye: boolean
-  colors?: boolean | Array<string>
+  colors?: Array<'w' | 'b'>
 }
 
 export default class Manager {
@@ -54,7 +54,6 @@ export default class Manager {
 
   tournamentNameExists(tournamentName): boolean {
     this.createTourneyListTable()
-
     const query = `SELECT name FROM TourneyList WHERE name=?`
     const result = this.db.prepare(query).get(tournamentName)
     return result !== undefined
@@ -66,7 +65,14 @@ export default class Manager {
     return names
   }
 
-  addPlayer(playerInfo: object, tournamentName: string): void {
+  playerNameExists(playerName, tournamentName): boolean {
+    const { firstName, lastName } = playerName
+    const sql = `SELECT firstname, lastname FROM ${tournamentName}_players WHERE firstname=? AND lastname=?`
+    const result = this.db.prepare(sql).get(firstName, lastName)
+    return result !== undefined
+  }
+
+  addPlayer(playerInfo, tournamentName: string): void {
     const { firstName, lastName, rating } = playerInfo
     const sql = `INSERT INTO ${tournamentName}_players (firstname, lastname, rating) VALUES (?, ?, ?)`
     this.db.prepare(sql).run(firstName, lastName, rating)

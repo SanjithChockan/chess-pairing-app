@@ -90,6 +90,11 @@ app.whenReady().then(() => {
     return inProgress
   })
 
+  ipcMain.handle('checkIfPlayerExists', async (_event, tournamentName, playerName) => {
+    const nameExists = managerObj.playerNameExists(playerName, tournamentName)
+    return nameExists
+  })
+
   ipcMain.on('sendTest', (_event, value) => {
     console.log('Printing from main process')
     console.log(value)

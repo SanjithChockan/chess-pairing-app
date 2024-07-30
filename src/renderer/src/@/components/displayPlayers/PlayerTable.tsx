@@ -16,12 +16,14 @@ import {
 import { Input } from '@renderer/@/components/ui/input'
 import { Label } from '@renderer/@/components/ui/label'
 import { Link, useNavigate } from '@tanstack/react-router'
+import { useToast } from '@renderer/@/components/ui/use-toast'
 
 type propType = {
   tourneyName: string
 }
 
 export default function PlayerGrid({ tourneyName }: propType): JSX.Element {
+  const { toast } = useToast()
   const gridRef = useRef<AgGridReact>(null)
   const [playersList, setPlayersState] = useState([{ firstName: '', lastName: '', rating: 0 }])
   const [rowData, setRowData] = useState(playersList)
@@ -51,14 +53,27 @@ export default function PlayerGrid({ tourneyName }: propType): JSX.Element {
     })
   }, [tourneyName, navigate])
 
-  const addPlayer = useCallback(() => {
+  const addPlayer = useCallback(async () => {
     const fn = (document.getElementById('firstname') as HTMLInputElement).value
     const ln = (document.getElementById('lastname') as HTMLInputElement).value
-    const rt = 0
-    const testName = { firstName: fn, lastName: ln, rating: rt }
-    const data = [testName, ...rowData]
-    setRowData(data)
-    window.api.addPlayer(tourneyName, testName)
+    const rt = +(document.getElementById('rating') as HTMLInputElement).value
+    // only add if player doesn't exist for V1 - (change once playerID is implemented along with redesign of backend db tables)
+    const playerExists = await window.api.checkIfPlayerExists(tourneyName, {
+      firstName: fn,
+      lastName: ln
+    })
+
+    if (playerExists) {
+      toast({
+        title: 'Invalid Input',
+        description: `Player ${fn} ${ln} already exists...`
+      })
+    } else {
+      const testName = { firstName: fn, lastName: ln, rating: rt }
+      const data = [testName, ...rowData]
+      setRowData(data)
+      window.api.addPlayer(tourneyName, testName)
+    }
   }, [rowData])
 
   const onRemoveSelected = useCallback(() => {
@@ -97,13 +112,26 @@ export default function PlayerGrid({ tourneyName }: propType): JSX.Element {
                   <Label htmlFor="firstname" className="text-right">
                     First Name
                   </Label>
-                  <Input id="firstname" defaultValue="Pedro" className="col-span-3" />
+                  <Input id="firstname" defaultValue="" className="col-span-3" />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="lastname" className="text-right">
                     Last Name
                   </Label>
-                  <Input id="lastname" defaultValue="Duarte" className="col-span-3" />
+                  <Input id="lastname" defaultValue="" className="col-span-3" />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="rating" className="text-right">
+                    Rating
+                  </Label>
+                  <Input
+                    id="rating"
+                    defaultValue="0"
+                    type="number"
+                    min="0"
+                    max="5000"
+                    className="col-span-3"
+                  />
                 </div>
               </div>
               <DialogFooter>
