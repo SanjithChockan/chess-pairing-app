@@ -54,7 +54,7 @@ export default function CurrentStandings({
     params.api.applyColumnState({ state: defaultSortModel })
   }, [])
   return (
-    <>
+    <div>
       <div className="ag-theme-quartz w-full" style={{ height: 500 }}>
         <AgGridReact
           ref={gridRef}
@@ -65,7 +65,7 @@ export default function CurrentStandings({
         />
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex justify-end">
         <Button
           variant="outline"
           className={`bg-green-500 hover:bg-green-600 text-white border-green-500 hover:border-green-600 ${roundInProgress ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -75,6 +75,6 @@ export default function CurrentStandings({
           Generate Pairings
         </Button>
       </div>
-    </>
+    </div>
   )
 }

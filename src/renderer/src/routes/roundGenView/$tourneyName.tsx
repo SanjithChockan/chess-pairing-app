@@ -27,8 +27,8 @@ function TournamentPanel(): JSX.Element {
   }
 
   return (
-    <div>
-      <div className="flex flex-col space-y-4">
+    <div className="flex w-full h-screen justify-center items-center ">
+      <div className="flex flex-col space-y-4 w-3/5">
         <div>
           <h1>{tourneyName}</h1>
         </div>
