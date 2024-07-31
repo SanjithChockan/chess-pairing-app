@@ -1,7 +1,7 @@
 import { AgGridReact } from 'ag-grid-react'
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { Button } from '@renderer/@/components/ui/button'
-import { useNavigate } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { ColumnState, GridReadyEvent } from '@ag-grid-community/core'
 
 type propType = {
@@ -54,7 +54,7 @@ export default function CurrentStandings({
     params.api.applyColumnState({ state: defaultSortModel })
   }, [])
   return (
-    <div>
+    <div className="flex flex-col space-y-2">
       <div className="ag-theme-quartz w-full" style={{ height: 500 }}>
         <AgGridReact
           ref={gridRef}
@@ -65,7 +65,7 @@ export default function CurrentStandings({
         />
       </div>
 
-      <div className="flex justify-end">
+      <div className="flex justify-between">
         <Button
           variant="outline"
           className={`bg-green-500 hover:bg-green-600 text-white border-green-500 hover:border-green-600 ${roundInProgress ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -74,6 +74,10 @@ export default function CurrentStandings({
         >
           Generate Pairings
         </Button>
+
+        <Link to="/">
+          <Button variant="outline">Back</Button>
+        </Link>
       </div>
     </div>
   )

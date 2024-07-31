@@ -30,7 +30,7 @@ function TournamentPanel(): JSX.Element {
     <div className="flex w-full h-screen justify-center items-center ">
       <div className="flex flex-col space-y-4 w-3/5">
         <div>
-          <h1>{tourneyName}</h1>
+          <p className="text-2xl">{tourneyName}</p>
         </div>
         <Tabs value={activeTab} onValueChange={handleTabChange}>
           <div className="flex items-center">
