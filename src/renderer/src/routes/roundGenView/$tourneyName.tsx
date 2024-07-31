@@ -27,31 +27,33 @@ function TournamentPanel(): JSX.Element {
   }
 
   return (
-    <>
-      <div>
-        <h1>{tourneyName} </h1>
-      </div>
-      <Tabs value={activeTab} onValueChange={handleTabChange}>
-        <div className="flex items-center">
-          <TabsList>
-            <TabsTrigger value="standings">Standings</TabsTrigger>
-            <TabsTrigger value="pairing">Pairing</TabsTrigger>
-          </TabsList>
+    <div>
+      <div className="flex flex-col space-y-4">
+        <div>
+          <h1>{tourneyName}</h1>
         </div>
-        <TabsContent value="standings">
-          <CurrentStandings
-            tourneyName={tourneyName}
-            onGeneratePairings={(matches) => handlePairing('pairing', matches)}
-          ></CurrentStandings>
-        </TabsContent>
-        <TabsContent value="pairing">
-          <PairingView
-            tourneyName={tourneyName}
-            pairings={currentPairings}
-            onCompleteRound={() => handleCompleteRound()}
-          ></PairingView>
-        </TabsContent>
-      </Tabs>
-    </>
+        <Tabs value={activeTab} onValueChange={handleTabChange}>
+          <div className="flex items-center">
+            <TabsList>
+              <TabsTrigger value="standings">Standings</TabsTrigger>
+              <TabsTrigger value="pairing">Pairing</TabsTrigger>
+            </TabsList>
+          </div>
+          <TabsContent value="standings">
+            <CurrentStandings
+              tourneyName={tourneyName}
+              onGeneratePairings={(matches) => handlePairing('pairing', matches)}
+            ></CurrentStandings>
+          </TabsContent>
+          <TabsContent value="pairing">
+            <PairingView
+              tourneyName={tourneyName}
+              pairings={currentPairings}
+              onCompleteRound={() => handleCompleteRound()}
+            ></PairingView>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
   )
 }
