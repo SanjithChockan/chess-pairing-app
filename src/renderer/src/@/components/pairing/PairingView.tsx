@@ -79,12 +79,10 @@ export default function PairingView({
     const areResultsFilled = await window.api.checkAllResultsFilled(tourneyName)
     if (!areResultsFilled) {
       // pop a message to user to fill up all values
-      console.log('before toast')
       toast({
         title: 'Uh oh! Something went wrong.',
         description: 'enter all results before completing round!'
       })
-      console.log('after toast')
     } else {
       await window.api.completeRound(tourneyName)
       // if tournament complete (check value in backend (invoke tournamentComplete function) - reroute to final page or just execute onCompleteRound())
@@ -101,7 +99,7 @@ export default function PairingView({
   }
 
   return (
-    <>
+    <div className="flex flex-col space-y-2">
       <div className="ag-theme-quartz w-full" style={{ height: 500 }}>
         <AgGridReact
           columnDefs={columnDefs}
@@ -121,6 +119,6 @@ export default function PairingView({
           Complete Round
         </Button>
       </div>
-    </>
+    </div>
   )
 }
