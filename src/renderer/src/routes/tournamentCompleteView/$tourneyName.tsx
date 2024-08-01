@@ -32,6 +32,7 @@ function finalView(): JSX.Element {
     ]
     params.api.applyColumnState({ state: defaultSortModel })
   }, [])
+
   return (
     <>
       <div>
