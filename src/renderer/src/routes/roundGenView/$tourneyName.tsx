@@ -3,6 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@renderer/@/components
 import { useState } from 'react'
 import CurrentStandings from '@renderer/@/components/standings/CurrentStandings'
 import PairingView from '@renderer/@/components/pairing/PairingView'
+import { Button } from '@renderer/@/components/ui/button'
 
 export const Route = createFileRoute('/roundGenView/$tourneyName')({
   component: TournamentPanel
@@ -33,11 +34,13 @@ function TournamentPanel(): JSX.Element {
           <p className="text-2xl">{tourneyName}</p>
         </div>
         <Tabs value={activeTab} onValueChange={handleTabChange}>
-          <div className="flex items-center">
+          <div className="flex items-center justify-between">
             <TabsList>
               <TabsTrigger value="standings">Standings</TabsTrigger>
               <TabsTrigger value="pairing">Pairing</TabsTrigger>
             </TabsList>
+
+            <Button>Delete</Button>
           </div>
           <TabsContent value="standings">
             <CurrentStandings
