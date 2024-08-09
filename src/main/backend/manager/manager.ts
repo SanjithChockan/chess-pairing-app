@@ -39,6 +39,14 @@ export default class Manager {
     this.db.exec(createPlayersTableQuery)
   }
 
+  deleteTournament(name: string): void {
+    // create table for tournament to store player information
+    const dropPlayerTableQuery = `DROP TABLE IF EXISTS ${name}_players`
+    this.db.exec(dropPlayerTableQuery)
+
+    // drop other tables associated with tournament name
+  }
+
   createTourneyListTable(): void {
     const createTourneyListQuery = `CREATE TABLE IF NOT EXISTS TourneyList(name TEXT NOT NULL, totalRounds INT NOT NULL, roundsComplete INT NOT NULL, roundInProgress INT NOT NULL)`
     this.db.exec(createTourneyListQuery)
