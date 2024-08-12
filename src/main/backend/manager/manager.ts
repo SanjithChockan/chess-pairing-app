@@ -43,10 +43,8 @@ export default class Manager {
     // create table for tournament to store player information
     const retrieveTablesToDropQuery = `SELECT name FROM sqlite_master WHERE type='table' AND name LIKE ?`
     const tablesToDrop = this.db.prepare(retrieveTablesToDropQuery).all(name + '%')
-    console.log(tablesToDrop)
 
     tablesToDrop.forEach((tableName) => {
-      console.log(`dropping table ${tableName.name}`)
       const dropTableQuery = `DROP TABLE IF EXISTS ${tableName.name}`
       this.db.prepare(dropTableQuery).run()
     })
