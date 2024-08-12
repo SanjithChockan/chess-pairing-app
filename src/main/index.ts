@@ -95,6 +95,11 @@ app.whenReady().then(() => {
     return nameExists
   })
 
+  ipcMain.handle('deleteTournament', async (_event, tournamentName) => {
+    managerObj.deleteTournament(tournamentName)
+    return
+  })
+
   ipcMain.on('sendTest', (_event, value) => {
     console.log('Printing from main process')
     console.log(value)

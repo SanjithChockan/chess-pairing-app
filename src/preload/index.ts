@@ -20,6 +20,7 @@ export type ContextBridgeApi = {
   checkAllResultsFilled: (tournamentName) => Promise<boolean>
   checkIfTournamentNameIsTaken: (tournamentName) => Promise<boolean>
   checkIfPlayerExists: (tournamentName, playerName) => Promise<boolean>
+  deleteTournament: (tournamentName) => Promise<void>
 }
 
 // Custom APIs for renderer
@@ -82,6 +83,10 @@ const api: ContextBridgeApi = {
   checkIfPlayerExists: async (tournamentName, playerName) => {
     const result = await ipcRenderer.invoke('checkIfPlayerExists', tournamentName, playerName)
     return result
+  },
+  deleteTournament: async (tournamentName) => {
+    await ipcRenderer.invoke('deleteTournament', tournamentName)
+    return
   }
 }
 

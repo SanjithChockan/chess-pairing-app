@@ -3,6 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@renderer/@/components
 import { useState } from 'react'
 import CurrentStandings from '@renderer/@/components/standings/CurrentStandings'
 import PairingView from '@renderer/@/components/pairing/PairingView'
+import { useNavigate } from '@tanstack/react-router'
 import { Button } from '@renderer/@/components/ui/button'
 
 export const Route = createFileRoute('/roundGenView/$tourneyName')({
@@ -13,6 +14,7 @@ function TournamentPanel(): JSX.Element {
   const { tourneyName } = Route.useParams()
   const [activeTab, setActiveTab] = useState<string>('standings')
   const [currentPairings, setCurrentPairings] = useState<object[]>([])
+  const navigate = useNavigate()
 
   const handleTabChange = (value: string): void => {
     setActiveTab(value)
@@ -27,8 +29,12 @@ function TournamentPanel(): JSX.Element {
     setActiveTab('standings')
   }
 
-  const handleDelete = (): void => {
+  const handleDelete = async (): Promise<void> => {
     // call delete function from api
+    await window.api.deleteTournament(tourneyName)
+    navigate({
+      to: '/'
+    })
   }
 
   return (
@@ -44,7 +50,7 @@ function TournamentPanel(): JSX.Element {
               <TabsTrigger value="pairing">Pairing</TabsTrigger>
             </TabsList>
 
-            <Button>Delete</Button>
+            <Button onClick={handleDelete}>Delete</Button>
           </div>
           <TabsContent value="standings">
             <CurrentStandings
