@@ -41,10 +41,9 @@ export default class Manager {
 
   deleteTournament(name: string): void {
     // create table for tournament to store player information
-    const dropPlayerTableQuery = `DROP TABLE IF EXISTS ${name}_players`
-    this.db.exec(dropPlayerTableQuery)
-
-    // drop other tables associated with tournament name
+    const retrieveTablesToDropQuery = `SELECT name FROM sqlite_master WHERE type='table' AND name LIKE ?`
+    const tablesToDrop = this.db.prepare(retrieveTablesToDropQuery).get(name + '%')
+    console.log(tablesToDrop)
   }
 
   createTourneyListTable(): void {

@@ -27,6 +27,10 @@ function TournamentPanel(): JSX.Element {
     setActiveTab('standings')
   }
 
+  const handleDelete = (): void => {
+    // call delete function from api
+  }
+
   return (
     <div className="flex w-full h-screen justify-center items-center ">
       <div className="flex flex-col space-y-4 w-3/5">
