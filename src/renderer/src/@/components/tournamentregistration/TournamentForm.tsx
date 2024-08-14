@@ -46,6 +46,14 @@ export default function TournamentForm(): JSX.Element {
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>): Promise<void> {
+    // no spaces allowed in tournament name
+    if (/^\d|\s/.test(values.tournamentName)) {
+      toast({
+        title: 'Tournament Name Format',
+        description: `Name should not start with a digit and should have no spaces`
+      })
+      return
+    }
     const tourneyExists = await window.api.checkIfTournamentNameIsTaken(values.tournamentName)
     if (tourneyExists) {
       toast({
