@@ -53,6 +53,14 @@ export default function PlayerGrid({ tourneyName }: propType): JSX.Element {
     })
   }, [tourneyName, navigate])
 
+  const handleDelete = async (): Promise<void> => {
+    // call delete function from api
+    await window.api.deleteTournament(tourneyName)
+    navigate({
+      to: '/'
+    })
+  }
+
   const addPlayer = useCallback(async () => {
     const fn = (document.getElementById('firstname') as HTMLInputElement).value
     const ln = (document.getElementById('lastname') as HTMLInputElement).value
@@ -94,6 +102,23 @@ export default function PlayerGrid({ tourneyName }: propType): JSX.Element {
 
   return (
     <div className="flex flex-col gap-4 mx-auto w-[60%] max-w-5xl">
+      <div className="flex items-center gap-2 justify-between">
+        <Button
+          variant="outline"
+          className={`bg-green-500 hover:bg-green-600 text-white border-green-500 hover:border-green-600 ${rowData.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+          onClick={completeRegistration}
+          disabled={rowData.length === 0}
+        >
+          Complete Registration
+        </Button>
+
+        <Button variant="outline" onClick={handleDelete}>
+          Delete Tournament
+        </Button>
+      </div>
+      <div className="ag-theme-quartz w-full" style={{ height: 500 }}>
+        <AgGridReact ref={gridRef} rowData={rowData} columnDefs={colDefs} rowSelection={'single'} />
+      </div>
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-2">
           <Dialog>
@@ -147,25 +172,11 @@ export default function PlayerGrid({ tourneyName }: propType): JSX.Element {
             Delete Selected
           </Button>
         </div>
-        <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            className={`bg-green-500 hover:bg-green-600 text-white border-green-500 hover:border-green-600 ${rowData.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
-            onClick={completeRegistration}
-            disabled={rowData.length === 0}
-          >
-            Complete Registration
-          </Button>
+        <div className="flex justify-end">
+          <Link to="/">
+            <Button variant="outline">Back</Button>
+          </Link>
         </div>
-      </div>
-
-      <div className="ag-theme-quartz w-full" style={{ height: 500 }}>
-        <AgGridReact ref={gridRef} rowData={rowData} columnDefs={colDefs} rowSelection={'single'} />
-      </div>
-      <div className="flex justify-end">
-        <Link to="/">
-          <Button variant="outline">Back</Button>
-        </Link>
       </div>
     </div>
   )
