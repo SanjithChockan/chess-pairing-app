@@ -48,6 +48,10 @@ export default class Manager {
       const dropTableQuery = `DROP TABLE IF EXISTS ${tableName.name}`
       this.db.prepare(dropTableQuery).run()
     })
+
+    // delete from tourneyList
+    const deleteTourneyFromTable = `DELETE FROM TourneyList WHERE name=?`
+    this.db.prepare(deleteTourneyFromTable).run(name)
   }
 
   createTourneyListTable(): void {

@@ -16,13 +16,10 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-  SelectGroup,
-  SelectLabel
+  SelectValue
 } from '@renderer/@/components/ui/select'
 
-import { ScrollArea } from "@renderer/@/components/ui/scroll-area"
-
+import { ScrollArea } from '@renderer/@/components/ui/scroll-area'
 
 export default function CardTournamentForm(): JSX.Element {
   const [tourneyList, setTourneyState] = useState(['default'])
