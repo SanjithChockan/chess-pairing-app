@@ -38,19 +38,25 @@ export default function PlayerGrid({ tourneyName }: propType): JSX.Element {
       const names = await window.api.getPlayers(tourneyName)
       setPlayersState(names)
       setRowData(names)
-      console.log('retrieved player data')
-      console.log(`player names: ${names}`)
     }
     f()
   }, [])
 
   const navigate = useNavigate()
   const completeRegistration = useCallback(async () => {
-    await window.api.completeRegistration(tourneyName)
-    navigate({
-      to: '/roundGenView/$tourneyName',
-      params: { tourneyName: tourneyName }
-    })
+    // only complete if more than 2 or more players are registered
+    if (rowData.length >= 2) {
+      await window.api.completeRegistration(tourneyName)
+      navigate({
+        to: '/roundGenView/$tourneyName',
+        params: { tourneyName: tourneyName }
+      })
+    } else {
+      toast({
+        title: 'Minimum Player Requirement',
+        description: `Tournament needs at least two players...`
+      })
+    }
   }, [tourneyName, navigate])
 
   const handleDelete = async (): Promise<void> => {
