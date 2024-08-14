@@ -50,7 +50,9 @@ function TournamentPanel(): JSX.Element {
               <TabsTrigger value="pairing">Pairing</TabsTrigger>
             </TabsList>
 
-            <Button onClick={handleDelete}>Delete</Button>
+            <Button variant="destructive" onClick={handleDelete}>
+              Delete Tournament
+            </Button>
           </div>
           <TabsContent value="standings">
             <CurrentStandings
