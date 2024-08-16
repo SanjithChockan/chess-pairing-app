@@ -261,7 +261,7 @@ export default class Manager {
     const drawQuery = `UPDATE ${tournamentName}_standings SET score = score + 0.5 WHERE firstname=? AND lastname=?`
     const winQuery = `UPDATE ${tournamentName}_standings SET score = score + 1 WHERE firstname=? AND lastname=?`
     const colorQuery = `UPDATE ${tournamentName}_standings SET colors = colors || ? WHERE firstname=? AND lastname=?`
-    matches.map((pair) => {
+    matches.map((pair: any) => {
       const [p1_firstname, p1_lastname] = pair.player1.split(' ')
       const [p2_firstname, p2_lastname] = pair.player2.split(' ')
 
@@ -295,9 +295,6 @@ export default class Manager {
     const incrementRoundsCompleteQuery = `UPDATE TourneyList SET roundsComplete = roundsComplete + 1 WHERE name=?`
     this.db.prepare(incrementRoundsCompleteQuery).run(tournamentName)
 
-    if (this.tournamentComplete(tournamentName)) {
-      console.log('Tournament is complete')
-    }
     return
   }
 }

@@ -25,7 +25,6 @@ function finalView(): JSX.Element {
   ])
 
   const onGridReady = useCallback(async (params: GridReadyEvent) => {
-    console.log(`tourneyName in Current Standings ${tourneyName}`)
     const names = await window.api.getCurrentStandings(tourneyName)
     setPlayersState(names)
     setRowData(names)

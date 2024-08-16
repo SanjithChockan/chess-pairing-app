@@ -30,7 +30,6 @@ export default function CardTournamentForm(): JSX.Element {
     const f = async (): Promise<void> => {
       const names = await window.api.getList()
       setTourneyState(names)
-      console.log('retrieved new data')
     }
     f()
   }, [])
@@ -38,8 +37,7 @@ export default function CardTournamentForm(): JSX.Element {
   const handleSelectTournament = async (): Promise<void> => {
     if (tourneyName !== 'None') {
       const standingsExist = await window.api.checkStandingsExist(tourneyName)
-      console.log(`standingsExist: ${standingsExist} for ${tourneyName}`)
-      // TODO: check if tournament is complete and reroute appropriately
+
       if (standingsExist) {
         const isTourneyComplete = await window.api.checkTournamentComplete(tourneyName)
         if (isTourneyComplete) {

@@ -29,7 +29,6 @@ export default function CurrentStandings({
   useEffect(() => {
     const f = async (): Promise<void> => {
       const isRoundInProgress = await window.api.getRoundInProgress(tourneyName)
-      console.log(`isRoundInProgress: ${isRoundInProgress}`)
       setRoundInProgress(isRoundInProgress)
     }
     f()
@@ -43,7 +42,6 @@ export default function CurrentStandings({
   }, [tourneyName, navigate])
 
   const onGridReady = useCallback(async (params: GridReadyEvent) => {
-    console.log(`tourneyName in Current Standings ${tourneyName}`)
     const names = await window.api.getCurrentStandings(tourneyName)
     setPlayersState(names)
     setRowData(names)

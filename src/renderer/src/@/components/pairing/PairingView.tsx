@@ -34,7 +34,6 @@ export default function PairingView({
       setRowData(names)
 
       const isRoundInProgress = await window.api.getRoundInProgress(tourneyName)
-      console.log(`isRoundInProgress: ${isRoundInProgress}`)
       setRoundInProgress(isRoundInProgress)
     }
     f()

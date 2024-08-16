@@ -17,7 +17,6 @@ export const Route = createFileRoute('/editTournament')({
 
 function editTournament(): JSX.Element {
   const { tourneyName } = Route.useSearch()
-  console.log(`tourneyName: ${tourneyName}`)
 
   return (
     <>

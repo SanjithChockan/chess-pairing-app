@@ -45,7 +45,6 @@ export default function PlayerGrid({ tourneyName }: propType): JSX.Element {
   const navigate = useNavigate()
   const completeRegistration = useCallback(async () => {
     // only complete if more than 2 or more players are registered
-    //console.log(`upon completion: ${rowData}`)
     const names = await window.api.getPlayers(tourneyName)
     if (names.length >= 2) {
       await window.api.completeRegistration(tourneyName)
@@ -89,7 +88,6 @@ export default function PlayerGrid({ tourneyName }: propType): JSX.Element {
       setRowData((prevData) => [testName, ...prevData])
       window.api.addPlayer(tourneyName, testName)
     }
-    console.log(`After adding player: ${JSON.stringify(rowData)}`)
   }, [rowData])
 
   const onRemoveSelected = useCallback(() => {

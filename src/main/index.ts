@@ -106,10 +106,11 @@ app.whenReady().then(() => {
   })
 
   ipcMain.handle('getTourneyList', (_event, requestString) => {
+    console.log(requestString)
     const names = managerObj.loadTournaments()
     const tourneyNames: string[] = []
 
-    names.map((name: object) => {
+    names.map((name: any) => {
       tourneyNames.push(name.name)
     })
     return tourneyNames
