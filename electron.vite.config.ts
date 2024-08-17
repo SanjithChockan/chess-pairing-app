@@ -8,13 +8,13 @@ export default defineConfig({
   main: {
     plugins: [externalizeDepsPlugin({ exclude: ['tournament-pairings'] })],
     build: {
-      sourcemap: true
+      //sourcemap: true
     }
   },
   preload: {
     plugins: [externalizeDepsPlugin()],
     build: {
-      sourcemap: true
+      //sourcemap: true
     }
   },
   renderer: {
@@ -38,7 +38,7 @@ export default defineConfig({
       })
     ],
     build: {
-      sourcemap: true
+      //sourcemap: true
     }
   }
 })
