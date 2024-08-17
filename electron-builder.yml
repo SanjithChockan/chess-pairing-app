@@ -1,5 +1,5 @@
 appId: com.electron.app
-productName: chess-verse-app
+productName: chess-pairing-app
 directories:
   buildResources: build
 files:

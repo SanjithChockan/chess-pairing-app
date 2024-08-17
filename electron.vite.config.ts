@@ -5,10 +5,16 @@ import { TanStackRouterVite } from '@tanstack/router-vite-plugin'
 
 export default defineConfig({
   main: {
-    plugins: [externalizeDepsPlugin({ exclude: ['tournament-pairings'] })]
+    plugins: [externalizeDepsPlugin({ exclude: ['tournament-pairings'] })],
+    build: {
+      sourcemap: true
+    }
   },
   preload: {
-    plugins: [externalizeDepsPlugin()]
+    plugins: [externalizeDepsPlugin()],
+    build: {
+      sourcemap: true
+    }
   },
   renderer: {
     resolve: {
@@ -22,6 +28,9 @@ export default defineConfig({
         routesDirectory: './src/renderer/src/routes',
         generatedRouteTree: './src/renderer/src/routeTree.gen.ts'
       })
-    ]
+    ],
+    build: {
+      sourcemap: true
+    }
   }
 })
